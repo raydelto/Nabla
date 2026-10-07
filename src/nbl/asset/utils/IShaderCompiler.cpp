@@ -703,7 +703,8 @@ std::string normalizeIncludeLookupName(const std::string& includeName)
     if (!hasSingleLeadingSeparator)
         return includeName;
     // on POSIX a single leading separator is also an absolute filesystem path (`#include "/abs/file.hlsl"`)
-    if (std::filesystem::path(includeName).is_absolute() && std::filesystem::exists(includeName))
+    std::error_code ec;
+    if (std::filesystem::path(includeName).is_absolute() && std::filesystem::exists(includeName,ec))
         return includeName;
 
     return includeName.substr(1ull);
