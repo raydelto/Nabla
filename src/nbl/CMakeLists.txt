@@ -767,16 +767,26 @@ list(APPEND INTERFACE_BUILD_DEFINITIONS
 target_link_libraries(Nabla PUBLIC $<BUILD_INTERFACE:gtml>)
 
 # libstdc++ implements the parallel `std::execution` policies on top of oneTBB whenever <tbb/tbb.h> is found,
-# then everything instantiating them (Nabla and its consumers) has to link TBB
+# then everything instantiating them (Nabla and its consumers) has to link TBB. Ask the standard library itself
+# which backend it picked (libc++ and older libstdc++ never use TBB, so a stray TBB header doesn't matter there).
 if(CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU" AND NOT ANDROID AND NOT APPLE)
 	include(CheckCXXSourceCompiles)
 	block()
 		set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY) # compile only, the point is that it won't link without TBB
-		check_cxx_source_compiles("#if !__has_include(<tbb/tbb.h>)\n#error no TBB\n#endif\nint main() {return 0;}" NBL_STDLIB_USES_TBB_PAR_BACKEND)
+		check_cxx_source_compiles("#include <execution>\n#ifndef _PSTL_PAR_BACKEND_TBB\n#error no TBB backend\n#endif\nint main() {return 0;}" NBL_STDLIB_USES_TBB_PAR_BACKEND)
 	endblock()
 	if(NBL_STDLIB_USES_TBB_PAR_BACKEND)
-		find_package(TBB REQUIRED CONFIG)
-		target_link_libraries(Nabla PUBLIC TBB::tbb)
+		find_package(TBB CONFIG QUIET)
+		if(TBB_FOUND)
+			target_link_libraries(Nabla PUBLIC TBB::tbb)
+		else()
+			# headers without the CMake package (or the library): fall back to the serial backend instead of failing to link
+			message(WARNING "libstdc++ found <tbb/tbb.h> and would run std::execution policies on oneTBB, but TBBConfig.cmake was not found. "
+				"Building with _GLIBCXX_USE_TBB_PAR_BACKEND=0 (parallel algorithms run serially). Install the TBB development package "
+				"(Ubuntu: libtbb-dev) or point TBB_DIR at TBBConfig.cmake to use oneTBB."
+			)
+			target_compile_definitions(Nabla PUBLIC _GLIBCXX_USE_TBB_PAR_BACKEND=0)
+		endif()
 	endif()
 endif()
 
