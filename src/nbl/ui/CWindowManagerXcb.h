@@ -71,6 +71,13 @@ class NBL_API2 CWindowManagerXcb final : public IWindowManagerXcb
 		void unregisterWindow(xcb_window_t window);
 		void dispatchEvent(const xcb_generic_event_t* event);
 		CWindowXcb* findWindow(xcb_window_t window) const;
+		// `findWindow` that also remembers which window's callbacks are about to run
+		inline CWindowXcb* beginDispatch(xcb_window_t window)
+		{
+			CWindowXcb* const found = findWindow(window);
+			m_dispatchingWindow = found;
+			return found;
+		}
 
 		// Declared first so it's destroyed last, after the event thread has stopped
 		struct SConnection
@@ -87,6 +94,7 @@ class NBL_API2 CWindowManagerXcb final : public IWindowManagerXcb
 		const SAtoms m_atoms;
 		// only touched on the event thread
 		core::unordered_map<xcb_window_t,CWindowXcb*> m_windows;
+		const CWindowXcb* m_dispatchingWindow = nullptr;
 
 		struct SRequestParams_NOOP
 		{

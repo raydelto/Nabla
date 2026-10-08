@@ -136,13 +136,24 @@ core::smart_refctd_ptr<IWindow> CWindowManagerXcb::createWindow(IWindow::SCreati
 	creationParams.width = std::max(creationParams.width,1u);
 	creationParams.height = std::max(creationParams.height,1u);
 
+	const bool map = !creationParams.flags.hasFlags(IWindow::ECF_HIDDEN);
+	// Called from a callback, the event thread can't wait on its own queue, but it already owns the window table
+	if (m_eventThread.isEventThread())
+	{
+		const xcb_window_t nativeWindow = createNativeWindow(creationParams);
+		if (nativeWindow==XCB_WINDOW_NONE)
+			return nullptr;
+		auto window = core::make_smart_refctd_ptr<CWindowXcb>(std::move(creationParams),core::smart_refctd_ptr<CWindowManagerXcb>(this),nativeWindow);
+		registerWindow(window.get(),map);
+		return window;
+	}
+
 	CAsyncQueue::future_t<xcb_window_t> future;
 	m_eventThread.request(&future,SRequestParams_CreateWindow{.params=&creationParams});
 	auto nativeWindow = future.acquire();
 	if (!nativeWindow || *nativeWindow==XCB_WINDOW_NONE)
 		return nullptr;
 
-	const bool map = !creationParams.flags.hasFlags(IWindow::ECF_HIDDEN);
 	auto window = core::make_smart_refctd_ptr<CWindowXcb>(std::move(creationParams),core::smart_refctd_ptr<CWindowManagerXcb>(this),*nativeWindow);
 	// the window must be known to the event thread before it's mapped, otherwise we'd lose the first events
 	CAsyncQueue::future_t<void> registered;
@@ -154,9 +165,11 @@ core::smart_refctd_ptr<IWindow> CWindowManagerXcb::createWindow(IWindow::SCreati
 void CWindowManagerXcb::destroyWindow(IWindow* wnd)
 {
 	const auto nativeWindow = static_cast<CWindowXcb*>(wnd)->getNativeHandle().window;
-	// the last reference got dropped by a callback
+	// the last reference to some other window got dropped by a callback
 	if (m_eventThread.isEventThread())
 	{
+		// The window whose event is being dispatched can't die here, `IWindow::IEventCallback` still writes its flags after the callback returns
+		assert(wnd!=m_dispatchingWindow);
 		unregisterWindow(nativeWindow);
 		return;
 	}
@@ -345,28 +358,28 @@ void CWindowManagerXcb::dispatchEvent(const xcb_generic_event_t* event)
 		{
 			const auto* ev = reinterpret_cast<const xcb_client_message_event_t*>(event);
 			if (ev->type==m_atoms.WM_PROTOCOLS && ev->format==32 && ev->data.data32[0]==m_atoms.WM_DELETE_WINDOW)
-			if (auto* window=findWindow(ev->window))
+			if (auto* window=beginDispatch(ev->window))
 				window->onDeleteRequested();
 			break;
 		}
 		case XCB_CONFIGURE_NOTIFY:
 		{
 			const auto* ev = reinterpret_cast<const xcb_configure_notify_event_t*>(event);
-			if (auto* window=findWindow(ev->window))
+			if (auto* window=beginDispatch(ev->window))
 				window->onConfigured(ev);
 			break;
 		}
 		case XCB_MAP_NOTIFY:
 		{
 			const auto* ev = reinterpret_cast<const xcb_map_notify_event_t*>(event);
-			if (auto* window=findWindow(ev->window))
+			if (auto* window=beginDispatch(ev->window))
 				window->onMapped();
 			break;
 		}
 		case XCB_UNMAP_NOTIFY:
 		{
 			const auto* ev = reinterpret_cast<const xcb_unmap_notify_event_t*>(event);
-			if (auto* window=findWindow(ev->window))
+			if (auto* window=beginDispatch(ev->window))
 				window->onUnmapped();
 			break;
 		}
@@ -374,7 +387,7 @@ void CWindowManagerXcb::dispatchEvent(const xcb_generic_event_t* event)
 		{
 			const auto* ev = reinterpret_cast<const xcb_property_notify_event_t*>(event);
 			if (ev->atom==m_atoms._NET_WM_STATE || ev->atom==m_atoms.WM_STATE)
-			if (auto* window=findWindow(ev->window))
+			if (auto* window=beginDispatch(ev->window))
 				window->updateState();
 			break;
 		}
@@ -384,7 +397,7 @@ void CWindowManagerXcb::dispatchEvent(const xcb_generic_event_t* event)
 			const auto* ev = reinterpret_cast<const xcb_focus_in_event_t*>(event);
 			// pointer focus details are about the window under the pointer, not ours
 			if (ev->detail!=XCB_NOTIFY_DETAIL_POINTER)
-			if (auto* window=findWindow(ev->event))
+			if (auto* window=beginDispatch(ev->event))
 				window->onFocusChanged(true,(event->response_type&0x7fu)==XCB_FOCUS_IN);
 			break;
 		}
@@ -393,7 +406,7 @@ void CWindowManagerXcb::dispatchEvent(const xcb_generic_event_t* event)
 		{
 			const auto* ev = reinterpret_cast<const xcb_enter_notify_event_t*>(event);
 			if (ev->detail!=XCB_NOTIFY_DETAIL_INFERIOR)
-			if (auto* window=findWindow(ev->event))
+			if (auto* window=beginDispatch(ev->event))
 				window->onFocusChanged(false,(event->response_type&0x7fu)==XCB_ENTER_NOTIFY);
 			break;
 		}
@@ -420,6 +433,7 @@ void CWindowManagerXcb::CAsyncQueue::background_work()
 		while (xcb_generic_event_t* event=xcb_poll_for_event(connection))
 		{
 			m_manager->dispatchEvent(event);
+			m_manager->m_dispatchingWindow = nullptr;
 			free(event);
 			any = true;
 		}

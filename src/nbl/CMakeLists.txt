@@ -991,3 +991,8 @@ source_group(TREE "${NBL_ROOT_PATH}"
     PREFIX "Source Files"
     FILES  ${NABLA_SOURCE_FILES}
 )
+
+# XCB window manager regression test (NAB-9)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+	add_subdirectory(ui/test)
+endif()
