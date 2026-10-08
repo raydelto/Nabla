@@ -930,10 +930,9 @@ nbl_install_dir_spec(../../include/nbl/application_templates nbl)
 get_property(_NBL_DXC_PACKAGE_RUNTIME_DLL_DIR_PATH_ GLOBAL PROPERTY NBL_3RDPARTY_DXC_NS_PACKAGE_RUNTIME_DLL_DIR_PATH)
 get_target_property(_NBL_NABLA_PACKAGE_RUNTIME_DLL_DIR_PATH_ Nabla NBL_PACKAGE_RUNTIME_DLL_DIR_PATH)
 # the installed Nabla shared object must find DXC next to it (an executable's RUNPATH doesn't apply to its dependencies),
-# it gets installed as a plain file copy of the build output so the entry goes into the build RPATH
+# (the build tree one finds it through the linker-generated build RPATH, install replaces that with INSTALL_RPATH)
 if(UNIX AND NOT APPLE AND NOT ANDROID AND NOT NBL_STATIC_BUILD)
 	cmake_path(RELATIVE_PATH _NBL_DXC_PACKAGE_RUNTIME_DLL_DIR_PATH_ BASE_DIRECTORY "${_NBL_NABLA_PACKAGE_RUNTIME_DLL_DIR_PATH_}" OUTPUT_VARIABLE _NBL_DXC_DIR_REL_TO_NABLA_)
-	set_property(TARGET Nabla APPEND PROPERTY BUILD_RPATH "$ORIGIN/${_NBL_DXC_DIR_REL_TO_NABLA_}")
 	set_property(TARGET Nabla APPEND PROPERTY INSTALL_RPATH "$ORIGIN/${_NBL_DXC_DIR_REL_TO_NABLA_}")
 endif()
 set(_NBL_CONSUMER_BIN_DIR_GE_
