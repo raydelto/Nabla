@@ -49,15 +49,40 @@ source /path/to/VulkanSDK/1.4.x.x/setup-env.sh
 
 Nabla vendors dependencies (DXC, Boost, OpenEXR, glslang, shaderc, Vulkan-Headers, etc.) and example suites via git submodules.
 
-Initialize all submodules recursively:
+### Fresh Fork Submodule Hydration
+
+Because the repository fork uses relative submodule URLs in `.gitmodules`, git defaults to looking under the fork owner (`raydelto`) for all submodules. Two upstream submodules (`3rdparty/boost/superproject` and `docker/msvc-winsdk`) are hosted solely under upstream `Devsh-Graphics-Programming` and do not exist under `raydelto`. Furthermore, `Ditt-Reference-Scenes` is a private reference repository that must be excluded.
+
+Configure the explicit upstream URLs, exclude private scenes, configure protocol requirements (SSH vs. HTTPS), and initialize:
+
 ```bash
-git submodule update --init --recursive
+# In your clone / worktree of raydelto/Nabla:
+git checkout linux-port
+
+# 1. Override relative submodule URLs that exist only in upstream Devsh:
+git config submodule."3rdparty/boost/superproject".url git@github.com:Devsh-Graphics-Programming/boost.git
+git config submodule."docker/msvc-winsdk".url git@github.com:Devsh-Graphics-Programming/docker-nanoserver-msvc-winsdk.git
+
+# 2. Exclude private scenes and initialize recursively (use HTTPS rewrite if SSH keys are not set up):
+git -c fetch.parallel=0 \
+    -c url.https://github.com/.insteadOf=git@github.com: \
+    -c submodule."Ditt-Reference-Scenes".update=none \
+    submodule update --init --recursive
 ```
 
-*Tip (submodule caching)*: When working across multiple checkouts, you can hydrate submodules locally from an existing populated clone without re-downloading from GitHub:
+### Local Submodule Caching (Fast Path)
+
+When working across multiple local worktrees or checkouts, use the cached initialization helper to clone directly from an existing populated clone on disk without network downloads (~15 seconds):
+
 ```bash
 cmake/scripts/linux/init-submodules-cached.sh <path-to-populated-cache> .
 ```
+
+> **Note on examples fork pin**: Ensure the local cache clone has fetched the `raydelto` remote in its `examples_tests` submodule before hydrating:
+> ```bash
+> git -C <path-to-populated-cache>/examples_tests fetch raydelto
+> ```
+> This ensures that the integration pin `c337709e` from `raydelto/Nabla-Examples-and-Tests` is present in the cache's git object database.
 
 ---
 
@@ -143,33 +168,33 @@ export VK_LOADER_DEBUG=layer,driver
 # export VK_DRIVER_FILES=/usr/share/vulkan/icd.d/intel_icd.json    # Intel Mesa
 ```
 
-Execute each binary from its directory:
+Execute each binary using a subshell `(cd ... && ./)` so the working directory of your shell is preserved:
 
 ### 1. `01_HelloCoreSystemAsset` (VFS & Async Assets)
 ```bash
-cd examples_tests/01_HelloCoreSystemAsset/bin && ./01_hellocoresystemasset
+(cd examples_tests/01_HelloCoreSystemAsset/bin && ./01_hellocoresystemasset)
 ```
 - Tests VFS mounting, archive extraction, async I/O futures, and image encoding/decoding.
 - Expected result: **Exit code 0** (clean pass on both NVIDIA and Intel setups).
 
 ### 2. `02_HelloCompute` (Vulkan 1.4 Compute & BDA)
 ```bash
-cd examples_tests/02_HelloCompute/bin && ./02_hellocompute
+(cd examples_tests/02_HelloCompute/bin && ./02_hellocompute)
 ```
 - Compiles HLSL compute kernel at runtime via `libdxcompiler.so`, dispatches 524,288 threads using Buffer Device Addresses, synchronizes with timeline semaphores, and validates memory readback.
 - Expected result: **Exit code 0** on both NVIDIA RTX and Intel UHD GPUs.
 
 ### 3. `21_LRUCacheUnitTest` (Core Data Structures)
 ```bash
-cd examples_tests/21_LRUCacheUnitTest/bin && ./21_lrucacheunittest
+(cd examples_tests/21_LRUCacheUnitTest/bin && ./21_lrucacheunittest)
 ```
 - Stress tests `nbl::core::ResizableLRUCache` allocations and eviction callbacks.
 - Expected result: **Exit code 0**.
 
 ### 4. `23_Arithmetic2UnitTest` (GPU Workgroup & Subgroup Parallel Math)
 ```bash
-cd examples_tests/23_Arithmetic2UnitTest/bin && ./23_arithmetic2unittest
+(cd examples_tests/23_Arithmetic2UnitTest/bin && ./23_arithmetic2unittest)
 ```
 - Cross-validates GPU parallel reductions, inclusive scans, and exclusive scans against CPU ground truth across various subgroup and workgroup sizes.
 - **NVIDIA GPU**: **Exit code 0** (~7 minutes runtime).
-- **Intel UHD (Mesa ANV)**: Known driver bug — exits with **code 139** (segfault inside `libvulkan_intel.so` during `vkCreateComputePipelines` on native subgroup size 32 inclusive scan at workgroup size 64). Emulated subgroup sizes and native subgroup sizes 8/16 all pass. Tracked as an upstream Mesa ANV issue.
+- **Intel UHD (Mesa ANV)**: Known driver bug — exits with **code 139** (segfault inside `libvulkan_intel.so` during `vkCreateComputePipelines` on native subgroup size 32 inclusive scan at workgroup size 64). Emulated subgroup sizes and native subgroup sizes 8/16 all pass. An upstream bug report to Mesa is pending (Troubleshooting Issue 21).
