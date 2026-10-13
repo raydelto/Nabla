@@ -3,6 +3,11 @@
 
 #include <limits>
 #include <cstdint>
+#include <array>
+#include <ratio>
+
+#include "nbl/core/math/floatutil.h"
+#include "nbl/core/math/glslFunctions.tcc"
 
 // move later if its useful for anything else
 namespace nbl::core::impl

@@ -1,3 +1,8 @@
+// `ILogicalDevice.h` (transitively) includes this header, but inline members here need a complete `ILogicalDevice`.
+// Enter through `ILogicalDevice.h`, so it is complete whichever header is included first. Outside the include guard
+// on purpose: while `ILogicalDevice.h` is being processed this is a no-op.
+#include "nbl/video/ILogicalDevice.h"
+
 #ifndef _NBL_VIDEO_I_GPU_COMMAND_BUFFER_H_INCLUDED_
 #define _NBL_VIDEO_I_GPU_COMMAND_BUFFER_H_INCLUDED_
 

@@ -1,6 +1,10 @@
 #ifndef _NBL_CORE_BASED_OFFET_INCLUDED_
 #define _NBL_CORE_BASED_OFFET_INCLUDED_
 
+#include <cstddef>
+#include <cstdint>
+#include <type_traits>
+
 namespace nbl::core
 {
 	template<typename T>

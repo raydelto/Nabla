@@ -4,6 +4,8 @@
 
 #include "nbl/video/IGPURayTracingPipeline.h"
 
+#include <volk.h>
+
 namespace nbl::video
 {
 

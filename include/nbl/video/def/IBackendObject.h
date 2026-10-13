@@ -1,6 +1,8 @@
 #ifndef _NBL_VIDEO_DEFINITION_I_BACKEND_OBJECT_H_INCLUDED_
 #define _NBL_VIDEO_DEFINITION_I_BACKEND_OBJECT_H_INCLUDED_
 
+#include "nbl/video/ILogicalDevice.h"
+
 namespace nbl::video
 {
 
@@ -10,6 +12,8 @@ inline IBackendObject::IBackendObject(core::smart_refctd_ptr<const ILogicalDevic
     IBackendObject::setObjectDebugName(nullptr);
     m_debugName[MAX_DEBUG_NAME_LENGTH] = 0;
 }
+
+inline IBackendObject::~IBackendObject() = default;
 
 inline E_API_TYPE IBackendObject::getAPIType() const
 {

@@ -5,6 +5,8 @@
 #ifndef __NBL_CORE_UNLOCK_GUARD_H_INCLUDED__
 #define __NBL_CORE_UNLOCK_GUARD_H_INCLUDED__
 
+#include <mutex>
+
 namespace nbl
 {
 namespace core

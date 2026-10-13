@@ -3,10 +3,13 @@
 
 
 #include "nbl/core/IReferenceCounted.h"
+#include "nbl/core/StorageTrivializer.h"
+#include "nbl/system/ExternalHandle.h"
 
 #include <chrono>
 
 #include "nbl/video/decl/IBackendObject.h"
+#include "nbl/video/IDeviceMemoryAllocation.h"
 
 
 namespace nbl::video

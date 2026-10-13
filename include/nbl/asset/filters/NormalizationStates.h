@@ -6,6 +6,8 @@
 
 #include "nbl/core/declarations.h"
 
+#include "nbl/asset/format/EFormat.h"
+
 #include <type_traits>
 
 namespace nbl::asset

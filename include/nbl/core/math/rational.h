@@ -4,6 +4,8 @@
 #ifndef _NBL_CORE_RATIONAL_H_INCLUDED_
 #define _NBL_CORE_RATIONAL_H_INCLUDED_
 
+#include <cstdint>
+
 #include <type_traits>
 
 //#include "nbl/core/math/irrMath.h"

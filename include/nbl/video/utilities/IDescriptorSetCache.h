@@ -9,6 +9,7 @@
 
 #include "nbl/video/IGPUDescriptorSet.h"
 #include "nbl/video/IDescriptorPool.h"
+#include "nbl/video/TimelineEventHandlers.h"
 
 
 namespace nbl::video

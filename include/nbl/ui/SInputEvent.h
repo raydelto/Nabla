@@ -3,6 +3,8 @@
 
 #include <chrono>
 
+#include "nbl/ui/KeyCodes.h"
+
 namespace nbl::ui
 {
 

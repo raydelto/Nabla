@@ -5,6 +5,8 @@
 #ifndef __NBL_CORE_BYTESWAP_H_INCLUDED__
 #define __NBL_CORE_BYTESWAP_H_INCLUDED__
 
+#include "nbl/core/math/floatutil.h"
+
 #include <stdint.h>
 #include <type_traits>
 

@@ -3,6 +3,7 @@
 #include "nbl/video/CVulkanLogicalDevice.h"
 #include "nbl/video/CVulkanImage.h"
 #include "nbl/video/CVulkanConnection.h"
+#include "nbl/video/surface/CSurfaceVulkan.h"
 
 namespace nbl::video
 {

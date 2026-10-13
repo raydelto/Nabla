@@ -159,5 +159,10 @@ namespace std
 }
 */
 
+// The member templates are defined separately, but every user needs them, otherwise a TU that only sees the declarations
+// leaves undefined references to instantiations nobody emits (this used to be hidden by the precompiled header).
+#include "nbl/core/def/smart_refctd_ptr.h"
+
 #endif
+
 

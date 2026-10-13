@@ -4,6 +4,9 @@
 #ifndef _NBL_VIDEO_ASSET_TRAITS_H_INCLUDED_
 #define _NBL_VIDEO_ASSET_TRAITS_H_INCLUDED_
 
+// enter the video include cycle through `ILogicalDevice`, the `IGPU*` inline members below need it complete
+#include "nbl/video/ILogicalDevice.h"
+
 #include "nbl/asset/IShader.h"
 #include "nbl/asset/ICPUBufferView.h"
 #include "nbl/video/IGPUBufferView.h"
@@ -16,6 +19,8 @@
 #include "nbl/asset/ICPUSampler.h"
 #include "nbl/video/IGPUSampler.h"
 #include "nbl/asset/ICPUImageView.h"
+#include "nbl/asset/ICPUPipelineCache.h"
+#include "nbl/video/IGPUPipelineCache.h"
 #include "nbl/video/IGPUImageView.h"
 #include "nbl/asset/ICPUAccelerationStructure.h"
 #include "nbl/video/IGPUAccelerationStructure.h"

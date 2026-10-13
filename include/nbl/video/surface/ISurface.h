@@ -5,6 +5,8 @@
 
 #include "nbl/asset/format/EColorSpace.h"
 #include "nbl/asset/format/EFormat.h"
+#include "nbl/asset/IImage.h"
+#include "nbl/ui/IWindow.h"
 
 #include "nbl/video/IAPIConnection.h"
 #include "nbl/builtin/hlsl/surface_transform.h"

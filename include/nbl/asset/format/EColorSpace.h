@@ -4,6 +4,8 @@
 #ifndef _NBL_ASSET_E_COLOR_SPACE_H_INCLUDED_
 #define _NBL_ASSET_E_COLOR_SPACE_H_INCLUDED_
 
+#include <cstdint>
+
 // TODO: move to HLSL and turn into enum classes (when 8bit int comes)
 namespace nbl::asset
 {

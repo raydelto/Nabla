@@ -1,7 +1,11 @@
 #ifndef _NBL_VIDEO_S_PHYSICAL_DEVICE_FEATURES_H_INCLUDED_
 #define _NBL_VIDEO_S_PHYSICAL_DEVICE_FEATURES_H_INCLUDED_
 
+#include "nbl/core/util/bitflag.h"
+
 #include "nbl/video/ECommonEnums.h"
+
+#include <cstring>
 
 namespace nbl::video
 {

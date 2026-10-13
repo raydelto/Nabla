@@ -5,6 +5,7 @@
 #define _NBL_ASSET_C_SMOOTH_NORMAL_GENERATOR_H_INCLUDED_
 
 #include "nbl/asset/utils/CVertexHashGrid.h"
+#include "nbl/asset/ICPUPolygonGeometry.h"
 
 
 namespace nbl::asset 

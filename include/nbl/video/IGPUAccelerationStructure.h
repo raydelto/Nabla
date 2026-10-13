@@ -9,6 +9,8 @@
 
 #include "nbl/video/IDeferredOperation.h"
 #include "nbl/video/IGPUBuffer.h"
+#include "nbl/video/SPhysicalDeviceLimits.h"
+#include "nbl/video/SPhysicalDeviceFeatures.h"
 
 #include "nbl/builtin/hlsl/acceleration_structures.hlsl"
 

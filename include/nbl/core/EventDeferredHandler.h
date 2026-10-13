@@ -5,6 +5,8 @@
 #ifndef __NBL_CORE_EVENT_DEFERRED_HANDLER_H__
 #define __NBL_CORE_EVENT_DEFERRED_HANDLER_H__
 
+#include "nbl/core/decl/BaseClasses.h"
+
 
 #include "nbl/core/decl/Types.h"
 

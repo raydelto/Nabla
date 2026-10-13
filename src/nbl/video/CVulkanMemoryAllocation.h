@@ -2,6 +2,7 @@
 #define _NBL_VIDEO_C_VULKAN_MEMORY_ALLOCATION_H_INCLUDED_
 
 
+#include "nbl/core/decl/smart_refctd_ptr.h"
 #include "nbl/video/IDeviceMemoryAllocation.h"
 
 #include <volk.h>

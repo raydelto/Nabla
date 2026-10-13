@@ -1,6 +1,7 @@
 // Copyright (C) 2024-2024 - DevSH Graphics Programming Sp. z O.O.
 // This file is part of the "Nabla Engine".
 #include "nbl/video/utilities/CAssetConverter.h"
+#include "nbl/video/alloc/SubAllocatedDescriptorSet.h"
 
 #include <type_traits>
 

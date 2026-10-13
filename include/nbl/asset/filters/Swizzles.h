@@ -8,6 +8,7 @@
 #include "nbl/core/declarations.h"
 
 #include "nbl/asset/ICPUImageView.h"
+#include "nbl/asset/format/convertColor.h"
 
 #include <type_traits>
 

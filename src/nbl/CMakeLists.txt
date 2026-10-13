@@ -827,6 +827,12 @@ if(NBL_PCH)
 	)
 endif()
 
+if(NBL_HEADER_SELF_CONTAINMENT_CHECK)
+	include("${NBL_ROOT_PATH}/cmake/NablaHeaderSelfContainmentCheck.cmake")
+	nbl_add_header_self_containment_check(Nabla)
+endif()
+
+
 start_tracking_variables_for_propagation_to_parent()
 add_subdirectory(ext EXCLUDE_FROM_ALL)
 propagate_changed_variables_to_parent_scope()

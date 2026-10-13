@@ -1,6 +1,7 @@
 #include "nbl/video/IQueue.h"
 #include "nbl/video/IGPUCommandBuffer.h"
 #include "nbl/video/ILogicalDevice.h"
+#include "nbl/video/IPhysicalDevice.h"
 #include "nbl/video/TimelineEventHandlers.h"
 
 #include "git_info.h"
@@ -139,6 +140,11 @@ uint32_t IQueue::cullResources(const ISemaphore* sema)
         return found->handler->poll().eventsLeft;
     }
     return m_submittedResources->poll().eventsLeft;
+}
+
+IQueue::~IQueue()
+{
+    //while (cullResources()) {} // deleter of `m_submittedResources` calls dtor which will do this
 }
 
 IQueue::DeferredSubmitCallback::DeferredSubmitCallback(const SSubmitInfo& info)

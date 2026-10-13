@@ -14,6 +14,7 @@
 #include "nbl/asset/ECommonEnums.h"
 #include "nbl/asset/IDescriptor.h"
 #include "nbl/asset/IBuffer.h"
+#include "nbl/asset/ICPUBuffer.h"
 #include "nbl/asset/format/EFormat.h"
 
 

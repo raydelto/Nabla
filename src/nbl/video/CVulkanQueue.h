@@ -3,6 +3,7 @@
 
 
 #include "nbl/video/IQueue.h"
+#include "nbl/video/utilities/renderdoc.h"
 
 #include <volk.h>
 

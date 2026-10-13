@@ -9,6 +9,7 @@
 #include "nbl/core/alloc/refctd_memory_resource.h"
 #include "nbl/core/alloc/address_allocator_traits.h"
 #include "nbl/core/alloc/AddressAllocatorConcurrencyAdaptors.h"
+#include "nbl/core/alloc/PoolAddressAllocator.h"
 
 #include "gtl/btree.hpp"
 

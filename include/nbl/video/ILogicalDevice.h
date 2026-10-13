@@ -6,6 +6,7 @@
 #include "nbl/asset/utils/ISPIRVEntryPointTrimmer.h"
 #include "nbl/asset/utils/CCompilerSet.h"
 
+#include "nbl/video/IAPIConnection.h"
 #include "nbl/video/SPhysicalDeviceFeatures.h"
 #include "nbl/video/SPhysicalDeviceLimits.h"
 #include "nbl/video/IDeferredOperation.h"
@@ -1630,4 +1631,7 @@ inline bool ILogicalDevice::validateMemoryBarrier(const uint32_t queueFamilyInde
 } // namespace nbl::video
 
 #include "nbl/undef_logging_macros.h"
+
+// inline definitions which need the complete `ILogicalDevice`
+#include "nbl/video/def/IBackendObject.h"
 #endif //_NBL_VIDEO_I_LOGICAL_DEVICE_H_INCLUDED_

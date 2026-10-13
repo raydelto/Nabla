@@ -12,6 +12,7 @@
 
 #include "nbl/asset/format/EFormat.h"
 #include "nbl/asset/IDescriptor.h"
+#include "nbl/asset/IImageView.h"
 #include "nbl/asset/IDescriptorSetLayout.h" //for IDescriptor::E_TYPE
 #include "nbl/core/SRange.h"
 

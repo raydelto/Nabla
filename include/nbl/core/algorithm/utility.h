@@ -1,6 +1,8 @@
 #ifndef _NBL_CORE_ALGORITHM_UTILITY_H_INCLUDED_
 #define _NBL_CORE_ALGORITHM_UTILITY_H_INCLUDED_
 
+#include <cstddef>
+
 #include <tuple>
 #include <variant>
 

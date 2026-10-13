@@ -5,6 +5,11 @@
 #ifndef _NBL_BUILTIN_HLSL_ENUMS_INCLUDED_
 #define _NBL_BUILTIN_HLSL_ENUMS_INCLUDED_
 
+#ifndef __HLSL_VERSION
+#include <cstdint>
+#include "nbl/macros.h" // NBL_ENUM_ADD_BITWISE_OPERATORS
+#endif
+
 namespace nbl
 {
 namespace hlsl

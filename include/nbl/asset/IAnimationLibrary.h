@@ -9,6 +9,7 @@
 
 #include "nbl/core/declarations.h"
 #include "nbl/asset/utils/CQuantQuaternionCache.h"
+#include "nbl/asset/format/decodePixels.h"
 
 namespace nbl
 {

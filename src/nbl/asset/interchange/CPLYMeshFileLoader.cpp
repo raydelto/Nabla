@@ -2,6 +2,8 @@
 // This file is part of the "Nabla Engine" and was originally part of the "Irrlicht Engine"
 // For conditions of distribution and use, see copyright notice in nabla.h
 // See the original file in irrlicht source for authors
+#include "nbl/asset/compile_config.h"
+
 #ifdef _NBL_COMPILE_WITH_PLY_LOADER_
 
 

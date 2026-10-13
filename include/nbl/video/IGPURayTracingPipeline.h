@@ -1,3 +1,8 @@
+// `ILogicalDevice.h` (transitively) includes this header, but inline members here need a complete `ILogicalDevice`.
+// Enter through `ILogicalDevice.h`, so it is complete whichever header is included first. Outside the include guard
+// on purpose: while `ILogicalDevice.h` is being processed this is a no-op.
+#include "nbl/video/ILogicalDevice.h"
+
 #ifndef _NBL_I_GPU_RAY_TRACING_PIPELINE_H_INCLUDED_
 #define _NBL_I_GPU_RAY_TRACING_PIPELINE_H_INCLUDED_
 
@@ -5,6 +10,9 @@
 #include "nbl/asset/IRayTracingPipeline.h"
 
 #include "nbl/video/SPipelineCreationParams.h"
+#include "nbl/video/IGPUBuffer.h"
+#include "nbl/video/IGPUPipeline.h"
+#include "nbl/video/SPhysicalDeviceLimits.h"
 
 
 namespace nbl::video

@@ -7,6 +7,7 @@
 
 #include "nbl/asset/IAsset.h"
 #include "nbl/asset/ISampler.h"
+#include "vectorSIMD.h"
 
 
 namespace nbl::asset

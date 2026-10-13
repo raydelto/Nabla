@@ -2,7 +2,7 @@
 #define _NBL_VIDEO_DECLARATION_I_BACKEND_OBJECT_H_INCLUDED_
 
 
-#include "nbl/core/IReferenceCounted.h"
+#include "nbl/core/decl/smart_refctd_ptr.h"
 
 #include <type_traits>
 
@@ -70,7 +70,8 @@ class IBackendObject : public virtual core::IReferenceCounted
 
     protected:
         IBackendObject(core::smart_refctd_ptr<const ILogicalDevice>&& device);
-        virtual ~IBackendObject() = default;
+        // defined in `nbl/video/def/IBackendObject.h`, destroying `m_originDevice` needs the complete `ILogicalDevice`
+        virtual ~IBackendObject();
 
     private:
         const core::smart_refctd_ptr<const ILogicalDevice> m_originDevice;

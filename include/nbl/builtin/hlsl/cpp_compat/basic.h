@@ -6,6 +6,7 @@
 
 #ifndef __HLSL_VERSION
 #include <type_traits>
+#include "nbl/macros.h" // NBL_FORCE_INLINE
 
 #define ARROW ->
 #define NBL_DEREF_THIS (*this)

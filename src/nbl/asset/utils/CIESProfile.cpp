@@ -2,6 +2,8 @@
 
 #include <atomic>
 #include "nbl/asset/filters/CBasicImageFilterCommon.h"
+#include "nbl/asset/filters/CFillImageFilter.h"
+#include "nbl/asset/interchange/IImageAssetHandlerBase.h"
 
 using namespace nbl;
 using namespace asset;

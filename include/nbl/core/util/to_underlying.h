@@ -5,6 +5,8 @@
 #ifndef _NBL_CORE_C_TO_UNDERLYING_H_INCLUDED_
 #define _NBL_CORE_C_TO_UNDERLYING_H_INCLUDED_
 
+#include <type_traits>
+
 namespace nbl::core
 {
     #if defined(__cpp_lib_to_underlying)

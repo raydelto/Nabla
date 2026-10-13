@@ -2,6 +2,7 @@
 #define _NBL_VIDEO_C_VULKAN_QUERY_POOL_H_INCLUDED_
 
 #include "nbl/video/IQueryPool.h"
+#include "nbl/video/IGPUCommandBuffer.h"
 
 #define VK_NO_PROTOTYPES
 #include <volk.h>

@@ -7,6 +7,8 @@
 #include "nbl/core/IReferenceCounted.h"
 #include "nbl/core/util/bitflag.h"
 
+#include "nbl/system/ExternalHandle.h"
+
 #include "nbl/video/EApiType.h"
 
 namespace nbl::video

@@ -4,6 +4,8 @@
 #ifndef _NBL_CORE_CORE_OWEN_SAMPLER_H_
 #define _NBL_CORE_CORE_OWEN_SAMPLER_H_
 
+#include "nbl/core/decl/BaseClasses.h"
+
 #include "nbl/core/sampling/RandomSampler.h"
 #include "nbl/core/sampling/SobolSampler.h"
 
