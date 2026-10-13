@@ -4,6 +4,9 @@
 // See the original file in irrlicht source for authors
 #ifndef _NBL_ASSET_C_PLY_MESH_FILE_LOADER_H_INCLUDED_
 #define _NBL_ASSET_C_PLY_MESH_FILE_LOADER_H_INCLUDED_
+
+#include "nbl/asset/compile_config.h"
+
 #ifdef _NBL_COMPILE_WITH_PLY_LOADER_
 
 #include "nbl/core/declarations.h"

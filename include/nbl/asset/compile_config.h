@@ -5,6 +5,9 @@
 #ifndef __NBL_ASSET_COMPILE_CONFIG_H_INCLUDED__
 #define __NBL_ASSET_COMPILE_CONFIG_H_INCLUDED__
 
+// `_NBL_COMPILE_WITH_*_LOADER_/WRITER_` come from `BuildConfigOptions.h`
+#include "nbl/core/decl/compile_config.h"
+
 // TODO: @Anastazluk review the `_NBL_COMPILE_WITH` which are present here
 
 //! Define _NBL_COMPILE_WITH_OPENSSL_ to enable compiling the engine using libssl.

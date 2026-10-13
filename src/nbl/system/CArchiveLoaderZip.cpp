@@ -1,5 +1,7 @@
+#include "nbl/asset/compile_config.h" // _NBL_COMPILE_WITH_{ZLIB,BZIP2,ZIP_ENCRYPTION}_
 #include "nbl/system/IFileViewAllocator.h"
 #include "nbl/system/CArchiveLoaderZip.h"
+#include "nbl/core/definitions.h" // `core::min` is only declared by `core/declarations.h`
 
 
 #include <aesGladman/fileenc.h>
