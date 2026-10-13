@@ -4,6 +4,8 @@
 
 #include "nbl/video/IGPUGraphicsPipeline.h"
 
+#include <volk.h>
+
 
 namespace nbl::video
 {

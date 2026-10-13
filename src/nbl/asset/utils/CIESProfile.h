@@ -5,8 +5,8 @@
 #ifndef __NBL_ASSET_C_IES_PROFILE_H_INCLUDED__
 #define __NBL_ASSET_C_IES_PROFILE_H_INCLUDED__
 
-#include "nbl/asset/metadata/CIESProfileMetadata.h"
 #include "nbl/builtin/hlsl/ies/profile.hlsl"
+#include "nbl/asset/ICPUImageView.h"
 namespace nbl { namespace hlsl { namespace ies { struct SProceduralTexture; } } }
 
 namespace nbl 

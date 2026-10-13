@@ -5,6 +5,7 @@
 #include "CSmoothNormalGenerator.h"
 
 #include "nbl/core/declarations.h"
+#include "nbl/asset/utils/CPolygonGeometryManipulator.h"
 #include "nbl/builtin/hlsl/shapes/triangle.hlsl"
 
 #include <algorithm>

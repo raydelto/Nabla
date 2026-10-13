@@ -1,5 +1,7 @@
 #include "nbl/video/IDescriptorPool.h"
 #include "nbl/video/IGPUDescriptorSetLayout.h"
+#include "nbl/video/ILogicalDevice.h"
+#include "nbl/video/IPhysicalDevice.h"
 
 namespace nbl::video
 {

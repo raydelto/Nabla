@@ -1,4 +1,6 @@
 #include "nbl/video/utilities/CComputeBlit.h"
+#include "nbl/video/utilities/CAssetConverter.h"
+
 #include "nbl/builtin/hlsl/binding_info.hlsl"
 #include "nbl/builtin/hlsl/tgmath.hlsl"
 

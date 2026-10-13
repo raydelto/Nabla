@@ -4,6 +4,8 @@
 
 #include "nbl/video/IGPUDescriptorSetLayout.h"
 
+#include <volk.h>
+
 
 namespace nbl::video
 {

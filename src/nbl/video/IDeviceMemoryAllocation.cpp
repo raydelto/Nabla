@@ -1,4 +1,6 @@
 #include "nbl/video/IDeviceMemoryAllocation.h"
+#include "nbl/video/ILogicalDevice.h"
+#include "nbl/video/IPhysicalDevice.h"
 
 namespace nbl::video
 {
