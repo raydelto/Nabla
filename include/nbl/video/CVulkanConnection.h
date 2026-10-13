@@ -2,6 +2,7 @@
 #define _NBL_C_VULKAN_CONNECTION_H_INCLUDED_
 
 #include "nbl/video/IAPIConnection.h"
+#include "nbl/video/IPhysicalDevice.h"
 #include "nbl/video/debug/CVulkanDebugCallback.h"
 
 #if defined(_NBL_PLATFORM_WINDOWS_)

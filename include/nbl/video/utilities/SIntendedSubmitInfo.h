@@ -3,6 +3,7 @@
 
 
 #include "nbl/video/IGPUCommandBuffer.h"
+#include "nbl/video/ILogicalDevice.h"
 
 
 namespace nbl::video

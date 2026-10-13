@@ -1,6 +1,11 @@
 // Copyright (C) 2018-2023 - DevSH Graphics Programming Sp. z O.O.
 // This file is part of the "Nabla Engine".
 // For conditions of distribution and use, see copyright notice in nabla.h
+// `ILogicalDevice.h` (transitively) includes this header, but inline members here need a complete `ILogicalDevice`.
+// Enter through `ILogicalDevice.h`, so it is complete whichever header is included first. Outside the include guard
+// on purpose: while `ILogicalDevice.h` is being processed this is a no-op.
+#include "nbl/video/ILogicalDevice.h"
+
 #ifndef _NBL_VIDEO_I_GPU_DESCRIPTOR_SET_H_INCLUDED_
 #define _NBL_VIDEO_I_GPU_DESCRIPTOR_SET_H_INCLUDED_
 

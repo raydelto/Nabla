@@ -6,6 +6,8 @@
 
 #include "nbl/video/surface/ISurface.h"
 #include "nbl/video/ILogicalDevice.h"
+#include "nbl/video/IPhysicalDevice.h"
+#include "nbl/video/TimelineEventHandlers.h"
 
 
 namespace nbl::video

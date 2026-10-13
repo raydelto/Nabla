@@ -3,6 +3,7 @@
 
 #include "nbl/video/IPhysicalDevice.h"
 #include "nbl/video/IGPUCommandBuffer.h"
+#include "nbl/video/surface/ISurface.h"
 
 namespace nbl::video
 {

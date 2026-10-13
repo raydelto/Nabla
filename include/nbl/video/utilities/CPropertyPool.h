@@ -6,6 +6,7 @@
 #define __NBL_VIDEO_C_PROPERTY_POOL_H_INCLUDED__
 
 #include "nbl/video/utilities/IPropertyPool.h"
+#include "nbl/video/IPhysicalDevice.h"
 
 
 namespace nbl::video

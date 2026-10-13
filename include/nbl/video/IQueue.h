@@ -2,6 +2,7 @@
 #define _NBL_VIDEO_I_QUEUE_H_INCLUDED_
 
 #include "nbl/video/ISemaphore.h"
+#include "nbl/video/IGPUAccelerationStructure.h"
 
 namespace nbl::video
 {
@@ -150,10 +151,8 @@ class IQueue : public core::Interface, public core::Unmovable
     protected:
         NBL_API2 IQueue(ILogicalDevice* originDevice, const uint32_t _famIx, const core::bitflag<CREATE_FLAGS> _flags, const float _priority);
         // As IQueue is logically an integral part of the `ILogicalDevice` the destructor will only run during `~ILogicalDevice` which means `waitIdle` already been called
-        inline ~IQueue()
-        {
-            //while (cullResources()) {} // deleter of `m_submittedResources` calls dtor which will do this
-        }
+        // Defined out of line because `m_submittedResources` needs the complete `MultiTimelineEventHandlerST`, which depends on `ILogicalDevice`
+        NBL_API2 ~IQueue();
 
         friend class CThreadSafeQueueAdapter;
         virtual RESULT submit_impl(const std::span<const SSubmitInfo> _submits) = 0;

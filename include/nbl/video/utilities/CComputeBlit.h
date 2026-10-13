@@ -2,6 +2,8 @@
 #define _NBL_VIDEO_C_COMPUTE_BLIT_H_INCLUDED_
 
 #include "nbl/asset/filters/CBlitUtilities.h"
+#include "nbl/asset/IPipelineLayout.h"
+#include "nbl/video/IPhysicalDevice.h"
 #include "nbl/builtin/hlsl/format.hlsl"
 #include "nbl/builtin/hlsl/blit/parameters.hlsl"
 
