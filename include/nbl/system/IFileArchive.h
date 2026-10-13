@@ -3,6 +3,11 @@
 // For conditions of distribution and use, see copyright notice in nabla.h
 // See the original file in irrlicht source for authors
 
+// `ISystem.h` includes this header and, at its end, `IFile.h`. The inline members here destroy `smart_refctd_ptr<IFile>`,
+// so enter through `ISystem.h` to get a complete `IFile` whichever header is included first. Outside the include guard
+// on purpose: while `ISystem.h` is being processed this is a no-op.
+#include "nbl/system/ISystem.h"
+
 #ifndef _NBL_SYSTEM_I_FILE_ARCHIVE_H_INCLUDED_
 #define _NBL_SYSTEM_I_FILE_ARCHIVE_H_INCLUDED_
 

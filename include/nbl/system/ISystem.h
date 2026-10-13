@@ -291,4 +291,8 @@ class NBL_API2 ISystem : public core::IReferenceCounted
 
 }
 
+// The inline members above copy and destroy `smart_refctd_ptr<IFile>`, so `IFile` has to be complete by the end of the TU.
+// `IFile` derives from `ISystem::IFutureManipulator`, hence it can only be included after `ISystem` is defined.
+#include "nbl/system/IFile.h"
+
 #endif
