@@ -6,6 +6,7 @@
 #define __NBL_ASSET_I_IMAGE_FILTER_H_INCLUDED__
 
 #include "nbl/core/declarations.h"
+#include "nbl/core/execution.h"
 
 #include <algorithm>
 

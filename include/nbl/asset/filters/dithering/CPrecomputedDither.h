@@ -7,6 +7,8 @@
 
 #include "../include/nbl/asset/filters/dithering/CDither.h"
 #include "../include/nbl/asset/filters/CFlattenRegionsImageFilter.h"
+#include "nbl/asset/format/decodePixels.h"
+#include "nbl/asset/format/encodePixels.h"
 
 namespace nbl
 {

@@ -5,6 +5,8 @@
 #ifndef __NBL_CORE_ADDRESS_ALLOCATOR_CONCURRENCY_ADAPTORS_H_INCLUDED__
 #define __NBL_CORE_ADDRESS_ALLOCATOR_CONCURRENCY_ADAPTORS_H_INCLUDED__
 
+#include "nbl/core/alloc/AddressAllocatorBase.h"
+
 #include "nbl/core/alloc/address_allocator_traits.h"
 
 namespace nbl

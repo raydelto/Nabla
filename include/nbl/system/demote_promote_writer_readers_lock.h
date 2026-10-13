@@ -1,6 +1,8 @@
 #ifndef __NBL_DEMOTE_PROMOTE_WRITER_READERS_LOCK_H_INCLUDED__
 #define __NBL_DEMOTE_PROMOTE_WRITER_READERS_LOCK_H_INCLUDED__
 
+#include <cassert>
+
 #include <thread>
 #include <concepts>
 

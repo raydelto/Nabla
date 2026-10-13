@@ -5,6 +5,8 @@
 #ifndef __NBL_CORE_I_THREAD_BOUND_H_INCLUDED__
 #define __NBL_CORE_I_THREAD_BOUND_H_INCLUDED__
 
+#include "nbl/macros.h"
+
 #include <thread>
 
 namespace nbl

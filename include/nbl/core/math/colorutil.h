@@ -5,6 +5,8 @@
 #ifndef __NBL_CORE_COLOR_UTIL_H_INCLUDED__
 #define __NBL_CORE_COLOR_UTIL_H_INCLUDED__
 
+#include <cmath>
+
 #include <cstdlib>
 
 namespace nbl { namespace core

@@ -4,6 +4,8 @@
 #ifndef _NBL_CORE_DYNAMIC_ARRAY_H_INCLUDED_
 #define _NBL_CORE_DYNAMIC_ARRAY_H_INCLUDED_
 
+#include "nbl/core/alloc/AlignedBase.h"
+
 #include "nbl/macros.h"
 #include "nbl/core/decl/Types.h" //for core::allocator
 

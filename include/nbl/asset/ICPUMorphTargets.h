@@ -7,6 +7,7 @@
 
 #include "nbl/asset/IAsset.h"
 #include "nbl/asset/IMorphTargets.h"
+#include "nbl/asset/ICPUGeometryCollection.h"
 
 
 namespace nbl::asset

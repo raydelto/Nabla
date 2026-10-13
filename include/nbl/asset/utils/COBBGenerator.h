@@ -8,6 +8,8 @@
 
 #include "nbl/builtin/hlsl/shapes/obb.hlsl"
 
+#include <optional>
+
 namespace nbl::asset
 {
 

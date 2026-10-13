@@ -7,6 +7,8 @@
 #include "nbl/core/declarations.h"
 #include "nbl/asset/ICPUBuffer.h"
 
+#include <gtl/phmap_dump.hpp>
+
 namespace nbl::asset
 {
 

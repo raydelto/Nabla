@@ -1,6 +1,8 @@
 #ifndef _NBL_UI_KEYCODES_H_INCLUDED_
 #define _NBL_UI_KEYCODES_H_INCLUDED_
 
+#include <cstdint>
+
 namespace nbl::ui
 {
 

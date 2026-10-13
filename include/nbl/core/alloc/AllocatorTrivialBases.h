@@ -4,6 +4,8 @@
 #ifndef _NBL_CORE_ALLOCATOR_TRIVIAL_BASES_H_INCLUDED_
 #define _NBL_CORE_ALLOCATOR_TRIVIAL_BASES_H_INCLUDED_
 
+#include "nbl/macros.h"
+
 
 namespace nbl::core
 {

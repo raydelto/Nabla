@@ -6,6 +6,7 @@
 
 
 #include "nbl/core/containers/CMemoryPool.h"
+#include "nbl/core/alloc/LinearAddressAllocator.h"
 
 
 namespace nbl::core

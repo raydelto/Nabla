@@ -1,6 +1,12 @@
 #ifndef _NBL_CORE_STORAGE_TRIVIALIZER_H_INCLUDED_
 #define _NBL_CORE_STORAGE_TRIVIALIZER_H_INCLUDED_
 
+#include "nbl/macros.h"
+
+#include <cstdint>
+#include <new>
+#include <utility>
+
 namespace nbl::core
 {
 

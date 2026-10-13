@@ -5,6 +5,7 @@
 #include <chrono>
 
 #include "nbl/core/IReferenceCounted.h"
+#include "nbl/core/decl/smart_refctd_ptr.h"
 #include "nbl/core/containers/CCircularBuffer.h"
 #include "nbl/core/SRange.h"
 

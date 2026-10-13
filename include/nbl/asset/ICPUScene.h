@@ -9,6 +9,7 @@
 
 #include "nbl/asset/IScene.h"
 #include "nbl/asset/ICPUMorphTargets.h"
+#include "nbl/asset/ICPUAccelerationStructure.h"
 #include "nbl/asset/material_compiler3/CTrueIR.h"
 
 

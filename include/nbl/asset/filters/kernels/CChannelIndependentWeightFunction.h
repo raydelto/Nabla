@@ -7,6 +7,9 @@
 #include <type_traits>
 #include <tuple>
 
+#include "nbl/asset/filters/kernels/WeightFunctions.h"
+#include "nbl/asset/ICPUImage.h"
+
 
 namespace nbl::asset
 {

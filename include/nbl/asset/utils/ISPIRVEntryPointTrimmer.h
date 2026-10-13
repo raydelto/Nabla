@@ -4,6 +4,8 @@
 #include "nbl/core/declarations.h"
 
 #include "nbl/asset/ICPUBuffer.h"
+#include "nbl/asset/IShader.h"
+#include "nbl/asset/utils/ISPIRVOptimizer.h"
 
 #include "nbl/system/ILogger.h"
 

@@ -8,7 +8,10 @@
 #include "nbl/builtin/hlsl/shapes/aabb.hlsl"
 
 #include "nbl/asset/IAsset.h"
+#include "nbl/asset/ICPUBuffer.h"
 #include "nbl/asset/format/EFormat.h"
+#include "nbl/asset/format/decodePixels.h"
+#include "nbl/asset/format/encodePixels.h"
 
 
 namespace nbl::asset

@@ -8,6 +8,7 @@
 #include "nbl/core/decl/compile_config.h"
 #include <nbl/builtin/hlsl/macros.h>
 #include "assert.h"
+#include <type_traits> // NBL_ENUM_ADD_BITWISE_OPERATORS
 
 
 

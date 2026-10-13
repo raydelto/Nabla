@@ -10,6 +10,7 @@
 #include "nbl/asset/ICPUSampler.h"
 #include "nbl/asset/ICPUDescriptorSetLayout.h"
 #include "nbl/asset/IDescriptorSet.h"
+#include "nbl/asset/ICPUAccelerationStructure.h"
 
 namespace nbl::asset
 {

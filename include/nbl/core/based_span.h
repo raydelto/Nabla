@@ -1,6 +1,11 @@
 #ifndef _NBL_CORE_BASED_SPAN_INCLUDED_
 #define _NBL_CORE_BASED_SPAN_INCLUDED_
 
+#include <cstddef>
+#include <cstdint>
+#include <span>
+#include <type_traits>
+
 namespace nbl::core
 {
 	template<typename T, size_t Extent = std::dynamic_extent>
