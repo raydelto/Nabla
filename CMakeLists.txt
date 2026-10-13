@@ -178,6 +178,7 @@ include(adjust/definitions)
 
 option(NBL_BUILD_DPL "Enable DPL (Dynamic Parallelism Library)" OFF)
 option(NBL_PCH "Enable pre-compiled header" ON)
+option(NBL_HEADER_SELF_CONTAINMENT_CHECK "Add the opt-in `nbl_header_self_containment_check` target, which compiles every public header on its own" OFF)
 option(NBL_FAST_MATH "Enable fast low-precision math" OFF) # the reason OFF is by default now is the var controling it at build time was set AFTER BuildConfigOptions was generated - resulting in the feature being always OFF regardless the value xD - so just for sanity, keeping the same behaviour by default
 option(NBL_BUILD_EXAMPLES "Enable building examples" ON)
 option(NBL_BUILD_MITSUBA_LOADER "Enable nbl::ext::MitsubaLoader?" ON)
