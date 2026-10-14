@@ -451,6 +451,7 @@ class CAssetConverter : public core::IReferenceCounted
 		#endif
 			return core::smart_refctd_ptr<CAssetConverter>(new CAssetConverter(std::move(params)),core::dont_grab);
 		}
+		using acceleration_structure_patch_base = asset_converter_impl::acceleration_structure_patch_base;
 		template<asset::Asset AssetType>
 		using patch_impl_t = asset_converter_impl::patch_impl_t<AssetType>;
 		// The default specialization provides simple equality operations and hash operations, this will work as long as your patch_impl_t doesn't:

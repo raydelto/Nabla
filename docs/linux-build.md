@@ -18,8 +18,8 @@ sudo apt install -y ninja-build lld nasm python3 git git-lfs ccache \
 git lfs install
 ```
 
-### Compiler: Clang 20
-Nabla on Linux requires **Clang 20** with LLD (Clang 18 encounters compiler crashes on `CAssetConverter.cpp`). GCC is not currently supported (no `CXX_GNU` profile).
+### Compiler: Clang 20 or GCC 13
+Nabla on Linux supports **Clang 20** and **GCC 13** with LLD. Clang 18 encounters compiler crashes on `CAssetConverter.cpp`. Keep separate build directories for each compiler; DXC must use the same compiler as its parent build.
 
 - **Option A (APT package)**: If `clang-20` is installed via APT:
   ```bash
@@ -100,6 +100,24 @@ cmake -S . -B build/linux-clang-release -G Ninja \
   -DNBL_UPDATE_GIT_SUBMODULE=OFF \
   -D_NBL_JOBS_AMOUNT_=2
 ```
+
+### GCC 13 configuration (NAB-12)
+
+Install `gcc-13` and `g++-13`, then use the same options with a separate tree:
+
+```bash
+CC=gcc-13 CXX=g++-13 cmake -S . -B build/linux-gcc-release -G Ninja \
+  -DCMAKE_BUILD_TYPE=Release -DCMAKE_LINKER_TYPE=LLD \
+  -DNBL_NSC_MODE=SOURCE -DNBL_BUILD_EXAMPLES=ON -DNBL_PCH=ON \
+  -DNBL_ENABLE_DOCKER_INTEGRATION=OFF -DNBL_UPDATE_GIT_SUBMODULE=OFF \
+  -D_NBL_JOBS_AMOUNT_=2
+cmake --build build/linux-gcc-release --target dxcompiler -j2
+cmake --build build/linux-gcc-release --target Nabla -j4
+cmake --build build/linux-gcc-release --target nsc -j4
+ctest --test-dir build/linux-gcc-release/tools/nsc -j1 --output-on-failure
+```
+
+Build examples 01/02/21 individually using the target names below and this build directory. Both compiler trees write `nsc` and example executables into the source tree: finish testing one compiler before building the other. GNU C/C++ profiles validate Release, RelWithDebInfo and Debug flags; runtime validation uses Release. No `-fpermissive` is required.
 
 ### Key Configuration Flags:
 - `-G Ninja`: **Mandatory**. The nested DXC sub-build enforces Ninja on Linux.
