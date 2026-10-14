@@ -1549,7 +1549,7 @@ NBL_ENUM_ADD_BITWISE_OPERATORS(CTrueIR::SMaterial::SMetadata::ECapabilityBits)
 namespace nbl::system::impl
 {
 template<>
-struct system::impl::to_string_helper<asset::material_compiler3::CTrueIR::ISpectralVariable::ESemantics>
+struct to_string_helper<asset::material_compiler3::CTrueIR::ISpectralVariable::ESemantics>
 {
 	using type = asset::material_compiler3::CTrueIR::ISpectralVariable::ESemantics;
 
@@ -1619,11 +1619,11 @@ inline void CTrueIR::SParameter::printDot(std::ostringstream& sstr, const core::
 	{
 		sstr << "\\nchannel = " << std::to_string(viewChannel);
 		const auto& viewParams = view->getCreationParameters();
-		sstr << "\\nWraps = {" << wrapU;
+		sstr << "\\nWraps = {" << +wrapU;
 		if (viewParams.viewType!=ICPUImageView::ET_1D && viewParams.viewType!=ICPUImageView::ET_1D_ARRAY)
-			sstr << "," << wrapV;
+			sstr << "," << +wrapV;
 		if (viewParams.viewType==ICPUImageView::ET_3D)
-			sstr << "," << wrapW;
+			sstr << "," << +wrapW;
 		// TODO: conditionally print this if wrap modes require it
 		sstr << "}\\nBorder = " << borderColor;
 	}

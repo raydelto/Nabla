@@ -3,10 +3,22 @@
 
 #include <nbl/builtin/hlsl/macros.h>
 
+// C++ vectors alias glm::vec (int dimensions); matrices use Nabla's uint16_t wrapper.
+// Match those non-type parameter types in trait specializations: GCC otherwise silently
+// selects the primary trait. Keep the existing shader-side uint32_t dimensions.
+#ifdef __HLSL_VERSION
+#define NBL_VECTOR_DIM_T uint32_t
+#define NBL_MATRIX_DIM_T uint32_t
+#else
+#define NBL_VECTOR_DIM_T int // glm::length_t is what glm::vec/glm::mat use for their dimensions
+#define NBL_MATRIX_DIM_T uint16_t // nbl::hlsl::matrix (cpp_compat/matrix.hlsl)
+#endif
+
 
 #ifndef __HLSL_VERSION
 #include <type_traits>
 #include "nbl/macros.h" // NBL_FORCE_INLINE
+
 
 #define ARROW ->
 #define NBL_DEREF_THIS (*this)

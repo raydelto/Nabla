@@ -22,7 +22,7 @@ struct matrix_traits
 };
 
 // TODO: when this bug: https://github.com/microsoft/DirectXShaderCompiler/issues/7007 is fixed, uncomment and delete template specializations
-template<typename T, uint32_t N, uint32_t M>
+template<typename T, NBL_MATRIX_DIM_T N, NBL_MATRIX_DIM_T M>
 struct matrix_traits<matrix<T,N,M> >
 {
     using scalar_type = T;

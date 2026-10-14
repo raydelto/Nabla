@@ -51,11 +51,9 @@ struct emulated_int64_t
     constexpr explicit emulated_int64_t(const emulated_uint64_t& other);
     #endif
 
-    NBL_CONSTEXPR_FUNC emulated_int64_t operator-() NBL_CONST_MEMBER_FUNC
-    {
-        storage_t inverted = ~data;
-        return create(_static_cast<storage_t>(inverted)) + _static_cast<this_t>(1);
-    }
+    // NOTE: out of line, because its body instantiates `impl::static_cast_helper<this_t, int>` and GCC
+    // would instantiate it while this class is still being defined, before the specializations below
+    NBL_CONSTEXPR_FUNC emulated_int64_t operator-() NBL_CONST_MEMBER_FUNC;
 
 };
 
@@ -156,6 +154,12 @@ struct static_cast_helper<To, From NBL_PARTIAL_REQ_BOT(concepts::IntegralScalar<
 
 } //namespace impl
 
+NBL_CONSTEXPR_FUNC emulated_int64_t emulated_int64_t::operator-() NBL_CONST_MEMBER_FUNC
+{
+    storage_t inverted = ~data;
+    return create(_static_cast<storage_t>(inverted)) + _static_cast<this_t>(1);
+}
+
 // Define constructor and conversion operators
 
 #ifndef __HLSL_VERSION
@@ -163,6 +167,7 @@ struct static_cast_helper<To, From NBL_PARTIAL_REQ_BOT(concepts::IntegralScalar<
 constexpr emulated_int64_t::emulated_int64_t(const emulated_uint64_t& other) : data(other.data) {}
 
 constexpr emulated_uint64_t::emulated_uint64_t(const emulated_int64_t& other) : data(other.data) {}
+
 
 template<concepts::IntegralScalar I>
 constexpr emulated_int64_t::emulated_int64_t(const I& toEmulate)

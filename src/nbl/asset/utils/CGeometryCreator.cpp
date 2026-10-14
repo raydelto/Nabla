@@ -130,7 +130,8 @@ static ICPUPolygonGeometry::SDataView createPositionView(size_t positionCount, c
 		if constexpr (ElementCountV == 4) return EF_R32G32B32A32_SFLOAT;
 	}();
 
-	return {
+	// Materialize the aggregate explicitly: GCC 13 rejects the equivalent copy-list form.
+	return ICPUPolygonGeometry::SDataView{
 		.composed = {
 			.encodedDataRange = {.f32 = aabb},
 			.stride = AttrSize,
@@ -145,7 +146,8 @@ static ICPUPolygonGeometry::SDataView createSnormNormalView(size_t normalCount, 
 {
 	constexpr auto AttrSize = sizeof(snorm_normal_t);
 	auto buff = ICPUBuffer::create({AttrSize * normalCount,IBuffer::EUF_NONE});
-	return {
+	// Materialize the aggregate explicitly: GCC 13 rejects the equivalent copy-list form.
+	return ICPUPolygonGeometry::SDataView{
 		.composed = {
 			.encodedDataRange = {.s8=aabb},
 			.stride = AttrSize,
@@ -1860,7 +1862,7 @@ core::smart_refctd_ptr<ICPUPolygonGeometry> CGeometryCreator::createIcoSphere(fl
 			shapes::AABB<4,float32_t> aabb;
 			aabb.maxVx = float32_t4(1, 1, 1, 0.f);
 			aabb.minVx = -aabb.maxVx;
-			retval->setNormalView({
+			retval->setNormalView(ICPUPolygonGeometry::SDataView{
 				.composed = {
 					.encodedDataRange = {.f32 = aabb},
 					.stride = AttrSize,

@@ -466,9 +466,9 @@ template<class T> struct remove_extent : type_identity<T> {};
 template<class T, uint32_t I> struct remove_extent<T[I]> : type_identity<T> {};
 template<class T> struct remove_extent<T[]> : type_identity<T> {};
 
-template<typename T, int N>
+template<typename T, NBL_VECTOR_DIM_T N>
 struct remove_extent<vector<T, N> > : type_identity<T> {};
-template<typename T, int N, int M>
+template<typename T, NBL_MATRIX_DIM_T N, NBL_MATRIX_DIM_T M>
 struct remove_extent<matrix<T, N, M> > : type_identity<vector<T, N> > {};
 
 template <class T>
@@ -675,7 +675,7 @@ struct is_vector : bool_constant<false> {};
 template<class T>
 struct is_matrix : bool_constant<false> {};
 
-template<class T, uint32_t N>
+template<class T, NBL_VECTOR_DIM_T N>
 struct is_vector<vector<T, N> > : bool_constant<true> {};
 
 template<typename T>
@@ -686,7 +686,7 @@ template<typename T>
 concept Vector = is_vector_v<T>;
 #endif
 
-template<class T, uint32_t N, uint32_t M>
+template<class T, NBL_MATRIX_DIM_T N, NBL_MATRIX_DIM_T M>
 struct is_matrix<matrix<T, N, M> > : bool_constant<true> {};
 
 template<class T>
@@ -726,10 +726,10 @@ struct extent<T[N], I> : integral_constant<uint64_t,extent<T, I - 1>::value> {};
 template<class T, uint32_t I> 
 struct extent<T[], I> : integral_constant<uint64_t,extent<T, I - 1>::value> {};
 
-template<class T, uint16_t N, uint32_t I>
+template<class T, NBL_VECTOR_DIM_T N, uint32_t I>
 struct extent<vector<T,N>, I> : extent<T[N], I> {};
 
-template<class T, uint16_t M, uint16_t N, uint32_t I> 
+template<class T, NBL_MATRIX_DIM_T M, NBL_MATRIX_DIM_T N, uint32_t I>
 struct extent<matrix<T,N,M>, I> : extent<T[N][M], I> {};
 
 
@@ -750,13 +750,13 @@ struct scalar_type<T,true>
     using type = T;
 };
 
-template<typename T, uint16_t N>
+template<typename T, NBL_VECTOR_DIM_T N>
 struct scalar_type<vector<T,N>,false>
 {
     using type = T;
 };
 
-template<typename T, uint16_t N, uint16_t M>
+template<typename T, NBL_MATRIX_DIM_T N, NBL_MATRIX_DIM_T M>
 struct scalar_type<matrix<T,N,M>,false>
 {
     using type = T;
