@@ -19,7 +19,7 @@ struct IESTextureInfo;
 }
 }
 
-NBL_HLSL_DEFINE_STRUCT((::nbl::hlsl::ies::IESTextureInfo),
+NBL_HLSL_DEFINE_STRUCT((nbl::hlsl::ies::IESTextureInfo),
     ((lastTexelRcp, float32_t2))
     ((maxValueRecip, float32_t))
 );

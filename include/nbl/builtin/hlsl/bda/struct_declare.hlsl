@@ -83,7 +83,7 @@ NBL_CONSTEXPR uint32_t default_alignment_v = default_alignment<T,MemberCount::va
 #define NBL_HLSL_IMPL_DEFINE_STRUCT_GET_MEMBER_TYPE(identifier,...) __VA_ARGS__
 #define NBL_HLSL_IMPL_DEFINE_STRUCT_GET_MEMBER_NAME(identifier,...) identifier
 #define NBL_HLSL_IMPL_DEFINE_STRUCT_MEMBER_TYPE(r,IDENTIFIER,i,e) template<> \
-struct ::nbl::hlsl::bda::member_type<NBL_EVAL IDENTIFIER,i> \
+struct nbl::hlsl::bda::member_type<NBL_EVAL IDENTIFIER,i> \
 { \
 using type = NBL_HLSL_IMPL_DEFINE_STRUCT_GET_MEMBER_TYPE e; \
 };
@@ -104,7 +104,7 @@ _restrict> NBL_HLSL_IMPL_DEFINE_STRUCT_GET_MEMBER_NAME e;
 BOOST_PP_SEQ_FOR_EACH_I(NBL_HLSL_IMPL_DEFINE_STRUCT_MEMBER,IDENTIFIER,MEMBER_SEQ) \
 }; \
 template<uint32_t alignment, bool _restrict> \
-struct ::nbl::hlsl::bda::__ref<NBL_EVAL IDENTIFIER,alignment,_restrict> : ::nbl::hlsl::bda::__base_ref<NBL_EVAL IDENTIFIER,alignment,_restrict> \
+struct nbl::hlsl::bda::__ref<NBL_EVAL IDENTIFIER,alignment,_restrict> : nbl::hlsl::bda::__base_ref<NBL_EVAL IDENTIFIER,alignment,_restrict> \
 { \
 	using __referenced_t = NBL_EVAL IDENTIFIER; \
     using base_t = __base_ref<__referenced_t,alignment,_restrict>; \
@@ -128,17 +128,17 @@ BOOST_PP_SEQ_FOR_EACH_I(NBL_HLSL_IMPL_DEFINE_STRUCT_MEMBER,IDENTIFIER,MEMBER_SEQ
 
 // some weird stuff to handle alignment
 #define NBL_HLSL_IMPL_DEFINE_STRUCT_BEGIN(IDENTIFIER,MEMBER_SEQ) template<> \
-struct ::nbl::hlsl::bda::member_count<NBL_EVAL IDENTIFIER > \
+struct nbl::hlsl::bda::member_count<NBL_EVAL IDENTIFIER > \
 { \
 	NBL_CONSTEXPR_STATIC_INLINE uint32_t value = BOOST_PP_SEQ_SIZE(MEMBER_SEQ); \
 }; \
 BOOST_PP_SEQ_FOR_EACH_I(NBL_HLSL_IMPL_DEFINE_STRUCT_MEMBER_TYPE,IDENTIFIER,MEMBER_SEQ) \
 template <> \
-struct ::nbl::hlsl::alignment_of<NBL_EVAL IDENTIFIER > \
+struct nbl::hlsl::alignment_of<NBL_EVAL IDENTIFIER > \
 {
 #define NBL_HLSL_IMPL_DEFINE_STRUCT_END(IDENTIFIER,MEMBER_SEQ,...) }; \
 template<> \
-struct ::nbl::hlsl::size_of<NBL_EVAL IDENTIFIER > \
+struct nbl::hlsl::size_of<NBL_EVAL IDENTIFIER > \
 { \
 	using type = NBL_EVAL IDENTIFIER; \
 	NBL_CONSTEXPR_STATIC_INLINE uint32_t __last_member_ix_v = ::nbl::hlsl::bda::member_count_v<type>-1; \

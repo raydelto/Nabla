@@ -118,11 +118,9 @@
     #define NBL_NO_VTABLE
 #endif // old FORCE_EMPTY_BASE_OPT
 
-#if __GNUC__ < 7 || (__GNUC__ == 7 && (__GNUC_MINOR__ < 2)) // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67054
-    #define GCC_CONSTRUCTOR_INHERITANCE_BUG_WORKAROUND(DEFAULT_CTOR) DEFAULT_CTOR
-#else
-    #define GCC_CONSTRUCTOR_INHERITANCE_BUG_WORKAROUND(DEFAULT_CTOR)
-#endif
+// BlockBasedAllocatorBase default-constructs before assigning the address allocator.
+// Keep the dummy constructor available on modern GCC as well as Clang/MSVC.
+#define GCC_CONSTRUCTOR_INHERITANCE_BUG_WORKAROUND(DEFAULT_CTOR) DEFAULT_CTOR
 
 
 #define NBL_ENUM_ADD_BITWISE_OPERATORS(EnumType)												\

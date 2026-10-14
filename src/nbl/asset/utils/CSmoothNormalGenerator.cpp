@@ -96,7 +96,7 @@ core::smart_refctd_ptr<ICPUPolygonGeometry> CSmoothNormalGenerator::processConne
 	hlsl::shapes::AABB<4,hlsl::float32_t> aabb;
 	aabb.maxVx = hlsl::float32_t4(1, 1, 1, 0.f);
 	aabb.minVx = -aabb.maxVx;
-	outPolygon->setNormalView({
+	outPolygon->setNormalView(ICPUPolygonGeometry::SDataView{
 		.composed = {
 			.encodedDataRange = {.f32 = aabb},
 			.stride = sizeof(hlsl::float32_t3),

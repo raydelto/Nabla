@@ -28,8 +28,10 @@ namespace nbl::video
 
 class NBL_API2 IPhysicalDevice : public core::Interface, public core::Unmovable
 {
-    template<class F> static constexpr bool is_bitflag = false;
-    template<class F> static constexpr bool is_bitflag<core::bitflag<F>> = true;
+    // a partial specialization of a variable template is not allowed in class scope (GCC), detect through a class template instead
+    template<class F> struct is_bitflag_helper : std::false_type {};
+    template<class F> struct is_bitflag_helper<core::bitflag<F>> : std::true_type {};
+    template<class F> static constexpr bool is_bitflag = is_bitflag_helper<F>::value;
 
     template<class T> struct RequestMapTraits;
     template<class R, class...Args>struct RequestMapTraits<R(IPhysicalDevice::*)(Args...) const> : RequestMapTraits<R(IPhysicalDevice::*)(Args...)> {};

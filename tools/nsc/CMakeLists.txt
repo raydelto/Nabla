@@ -263,6 +263,9 @@ add_test(NAME NBL_NSC_INSTALL_EXECUTABLES_TEST
 get_target_property(NBL_PACKAGE_RUNTIME_EXE_DIR_PATH ${EXECUTABLE_NAME} NBL_PACKAGE_RUNTIME_EXE_DIR_PATH)
 
 set(NBL_NSC_COMPILE_COMMAND
+	-I "${NBL_ROOT_PATH}/include"
+	-I "${NBL_ROOT_PATH}/3rdparty/dxc/dxc/external/SPIRV-Headers/include"
+	-I "${NBL_ROOT_PATH}/3rdparty/boost/superproject/libs/preprocessor/include"
 	-Fc "${NBL_NSC_COMPILE_DIRECTORY}/output.spv"
 	-spirv -Zpr -enable-16bit-types -fvk-use-scalar-layout -Wno-c++11-extensions -Wno-c++1z-extensions -Wno-c++14-extensions -Wno-gnu-static-float-init -fspv-target-env=vulkan1.3 -HV 202x -E main -fspv-debug=source -fspv-debug=tool -T cs_6_7
 	"${CMAKE_CURRENT_SOURCE_DIR}/test/hlsl/input.hlsl"

@@ -12,80 +12,11 @@
 
 namespace nbl::video
 {
-/*
-* This whole class assumes all assets you are converting will be used in read-only mode by the Device.
-* It's a valid assumption for everything from pipelines to shaders, but not for descriptors (with exception of samplers) and their sets.
-* 
-* Only Descriptors (by proxy their backing objects) and their Sets can have their contents changed after creation.
-* 
-* What this converter does is it computes hashes and compares equality based on the contents of an IAsset, not the pointer!
-* With some sane limits, its not going to compare the contents of an ICPUImage or ICPUBuffer.
-* 
-* Therefore if you don't want some resource to be deduplicated you need to "explicitly" let us know via `SInputs::getDependantUniqueCopyGroupID`.
-*/
-class CAssetConverter : public core::IReferenceCounted
+// GCC does not implement class-scope explicit specializations (CWG 727).
+// Keep implementation types complete before CAssetConverter instantiates its caches.
+// D12: all compilers use this layout; aliases preserve source spellings, not ABI.
+namespace asset_converter_impl
 {
-	public:
-		// Shader, DSLayout, PipelineLayout, Compute Pipeline
-		// Renderpass, Graphics Pipeline
-		// Buffer, BufferView, Sampler, Image, Image View, Bottom Level AS, Top Level AS, Descriptor Set, Framebuffer  
-		// Buffer -> SRange, patched usage, owner(s)
-		// BufferView -> SRange, promoted format
-		// Sampler -> Clamped Params (only aniso, really)
-		// Image -> this, patched usage, promoted format
-		// Image View -> ref to patched Image, patched usage, promoted format
-		// Descriptor Set -> unique layout, 
-		using supported_asset_types = core::type_list<
-			asset::ICPUSampler,
-			asset::IShader,
-			asset::ICPUBuffer,
-			asset::ICPUBottomLevelAccelerationStructure,
-			asset::ICPUTopLevelAccelerationStructure,
-			asset::ICPUImage,
-			asset::ICPUBufferView,
-			asset::ICPUImageView,
-			asset::ICPUDescriptorSetLayout,
-			asset::ICPUPipelineLayout,
-			asset::ICPUPipelineCache,
-			asset::ICPUComputePipeline,
-			asset::ICPURayTracingPipeline,
-			asset::ICPURenderpass,
-			asset::ICPUGraphicsPipeline,
-			asset::ICPUDescriptorSet,
-			//asset::ICPUFramebuffer doesn't exist yet XD
-			asset::ICPUPolygonGeometry
-		>;
-
-		struct SCreationParams
-		{
-			inline bool valid() const
-			{
-				if (!device)
-					return false;
-
-				return true;
-			}
-
-			// required not null
-			ILogicalDevice* device = nullptr;
-			// optional
-			core::smart_refctd_ptr<const asset::ISPIRVOptimizer> optimizer = {};
-		};
-		static inline core::smart_refctd_ptr<CAssetConverter> create(SCreationParams&& params)
-		{
-			if (!params.valid())
-				return nullptr;
-		#ifndef _NBL_DEBUG
-			if (!params.optimizer)
-			{
-				using pass_e = asset::ISPIRVOptimizer::E_OPTIMIZER_PASS;
-				// shall we do others?
-				const pass_e passes[] = {pass_e::EOP_STRIP_DEBUG_INFO};
-				params.optimizer = core::make_smart_refctd_ptr<asset::ISPIRVOptimizer>(passes);
-			}
-		#endif
-			return core::smart_refctd_ptr<CAssetConverter>(new CAssetConverter(std::move(params)),core::dont_grab);
-		}
 		// When getting dependents, the creation parameters of GPU objects will be produced and patched appropriately.
 		// `patch_t` uses CRTP to inherit from `patch_impl_t` to provide default `operator==` and `update_hash()` definition.
 		// The default specialization kicks in for any `AssetType` that has nothing possible to patch (e.g. Descriptor Set Layout).
@@ -444,6 +375,84 @@ class CAssetConverter : public core::IReferenceCounted
 				}
 		};
 #undef PATCH_IMPL_BOILERPLATE
+}
+
+/*
+* This whole class assumes all assets you are converting will be used in read-only mode by the Device.
+* It's a valid assumption for everything from pipelines to shaders, but not for descriptors (with exception of samplers) and their sets.
+* 
+* Only Descriptors (by proxy their backing objects) and their Sets can have their contents changed after creation.
+* 
+* What this converter does is it computes hashes and compares equality based on the contents of an IAsset, not the pointer!
+* With some sane limits, its not going to compare the contents of an ICPUImage or ICPUBuffer.
+* 
+* Therefore if you don't want some resource to be deduplicated you need to "explicitly" let us know via `SInputs::getDependantUniqueCopyGroupID`.
+*/
+class CAssetConverter : public core::IReferenceCounted
+{
+	public:
+		// Shader, DSLayout, PipelineLayout, Compute Pipeline
+		// Renderpass, Graphics Pipeline
+		// Buffer, BufferView, Sampler, Image, Image View, Bottom Level AS, Top Level AS, Descriptor Set, Framebuffer  
+		// Buffer -> SRange, patched usage, owner(s)
+		// BufferView -> SRange, promoted format
+		// Sampler -> Clamped Params (only aniso, really)
+		// Image -> this, patched usage, promoted format
+		// Image View -> ref to patched Image, patched usage, promoted format
+		// Descriptor Set -> unique layout, 
+		using supported_asset_types = core::type_list<
+			asset::ICPUSampler,
+			asset::IShader,
+			asset::ICPUBuffer,
+			asset::ICPUBottomLevelAccelerationStructure,
+			asset::ICPUTopLevelAccelerationStructure,
+			asset::ICPUImage,
+			asset::ICPUBufferView,
+			asset::ICPUImageView,
+			asset::ICPUDescriptorSetLayout,
+			asset::ICPUPipelineLayout,
+			asset::ICPUPipelineCache,
+			asset::ICPUComputePipeline,
+			asset::ICPURayTracingPipeline,
+			asset::ICPURenderpass,
+			asset::ICPUGraphicsPipeline,
+			asset::ICPUDescriptorSet,
+			//asset::ICPUFramebuffer doesn't exist yet XD
+			asset::ICPUPolygonGeometry
+		>;
+
+		struct SCreationParams
+		{
+			inline bool valid() const
+			{
+				if (!device)
+					return false;
+
+				return true;
+			}
+
+			// required not null
+			ILogicalDevice* device = nullptr;
+			// optional
+			core::smart_refctd_ptr<const asset::ISPIRVOptimizer> optimizer = {};
+		};
+		static inline core::smart_refctd_ptr<CAssetConverter> create(SCreationParams&& params)
+		{
+			if (!params.valid())
+				return nullptr;
+		#ifndef _NBL_DEBUG
+			if (!params.optimizer)
+			{
+				using pass_e = asset::ISPIRVOptimizer::E_OPTIMIZER_PASS;
+				// shall we do others?
+				const pass_e passes[] = {pass_e::EOP_STRIP_DEBUG_INFO};
+				params.optimizer = core::make_smart_refctd_ptr<asset::ISPIRVOptimizer>(passes);
+			}
+		#endif
+			return core::smart_refctd_ptr<CAssetConverter>(new CAssetConverter(std::move(params)),core::dont_grab);
+		}
+		template<asset::Asset AssetType>
+		using patch_impl_t = asset_converter_impl::patch_impl_t<AssetType>;
 		// The default specialization provides simple equality operations and hash operations, this will work as long as your patch_impl_t doesn't:
 		// - use a container like `core::vector<T>`, etc.
 		// - use pointers to other objects or arrays whose contents must be analyzed
@@ -1234,10 +1243,10 @@ class CAssetConverter : public core::IReferenceCounted
 
 // nothing to do
 template<asset::Asset AssetType>
-inline CAssetConverter::patch_impl_t<AssetType>::patch_impl_t(const AssetType* asset) {}
+inline asset_converter_impl::patch_impl_t<AssetType>::patch_impl_t(const AssetType* asset) {}
 // always valid
 template<asset::Asset AssetType>
-inline bool CAssetConverter::patch_impl_t<AssetType>::valid(const ILogicalDevice* device) { return true; }
+inline bool asset_converter_impl::patch_impl_t<AssetType>::valid(const ILogicalDevice* device) { return true; }
 
 }
 #endif

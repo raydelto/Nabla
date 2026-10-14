@@ -18,7 +18,7 @@ struct vector_traits
     NBL_CONSTEXPR_STATIC_INLINE bool IsVector = false;
 };
 
-template<typename T, uint16_t N>
+template<typename T, NBL_VECTOR_DIM_T N>
 struct vector_traits<vector<T, N> >
 {
     using scalar_type = T;

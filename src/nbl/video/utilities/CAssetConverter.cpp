@@ -30,8 +30,8 @@ namespace video
 // No asset has a 0 length input to the hash function
 const core::blake3_hash_t CAssetConverter::CHashCache::NoContentHash = static_cast<core::blake3_hash_t>(core::blake3_hasher());
 
-CAssetConverter::patch_impl_t<ICPUSampler>::patch_impl_t(const ICPUSampler* sampler) : anisotropyLevelLog2(sampler->getParams().AnisotropicFilter) {}
-bool CAssetConverter::patch_impl_t<ICPUSampler>::valid(const ILogicalDevice* device)
+asset_converter_impl::patch_impl_t<ICPUSampler>::patch_impl_t(const ICPUSampler* sampler) : anisotropyLevelLog2(sampler->getParams().AnisotropicFilter) {}
+bool asset_converter_impl::patch_impl_t<ICPUSampler>::valid(const ILogicalDevice* device)
 {
 	if (anisotropyLevelLog2>5) // unititialized
 		return false;
@@ -41,8 +41,8 @@ bool CAssetConverter::patch_impl_t<ICPUSampler>::valid(const ILogicalDevice* dev
 	return true;
 }
 
-CAssetConverter::patch_impl_t<ICPUBuffer>::patch_impl_t(const ICPUBuffer* buffer) : usage(buffer->getUsageFlags()) {}
-bool CAssetConverter::patch_impl_t<ICPUBuffer>::valid(const ILogicalDevice* device)
+asset_converter_impl::patch_impl_t<ICPUBuffer>::patch_impl_t(const ICPUBuffer* buffer) : usage(buffer->getUsageFlags()) {}
+bool asset_converter_impl::patch_impl_t<ICPUBuffer>::valid(const ILogicalDevice* device)
 {
 	const auto& features = device->getEnabledFeatures();
 	if (usage.hasFlags(usage_flags_t::EUF_CONDITIONAL_RENDERING_BIT_EXT) && !features.conditionalRendering)
@@ -58,7 +58,7 @@ bool CAssetConverter::patch_impl_t<ICPUBuffer>::valid(const ILogicalDevice* devi
 	return true;
 }
 
-bool CAssetConverter::acceleration_structure_patch_base::valid(const ILogicalDevice* device)
+bool asset_converter_impl::acceleration_structure_patch_base::valid(const ILogicalDevice* device)
 {
 	// note that we don't check the validity of things we don't patch, all the instance and geometry data, but it will be checked by the driver anyway during creation/build
 	if (preference==BuildPreference::Invalid) // unititialized or just wrong
@@ -84,7 +84,7 @@ bool CAssetConverter::acceleration_structure_patch_base::valid(const ILogicalDev
 	}
 	return true;
 }
-CAssetConverter::patch_impl_t<ICPUBottomLevelAccelerationStructure>::patch_impl_t(const ICPUBottomLevelAccelerationStructure* blas)
+asset_converter_impl::patch_impl_t<ICPUBottomLevelAccelerationStructure>::patch_impl_t(const ICPUBottomLevelAccelerationStructure* blas)
 {
 	const auto flags = blas->getBuildFlags();
 	// straight up invalid
@@ -103,7 +103,7 @@ CAssetConverter::patch_impl_t<ICPUBottomLevelAccelerationStructure>::patch_impl_
 	lowMemory = flags.hasFlags(build_flags_t::LOW_MEMORY_BIT);
 	allowDataAccess = flags.hasFlags(build_flags_t::ALLOW_DATA_ACCESS);
 }
-auto CAssetConverter::patch_impl_t<ICPUBottomLevelAccelerationStructure>::getBuildFlags(const ICPUBottomLevelAccelerationStructure* blas) const -> core::bitflag<build_flags_t>
+auto asset_converter_impl::patch_impl_t<ICPUBottomLevelAccelerationStructure>::getBuildFlags(const ICPUBottomLevelAccelerationStructure* blas) const -> core::bitflag<build_flags_t>
 {
 	constexpr build_flags_t OverridableMask = build_flags_t::LOW_MEMORY_BIT|build_flags_t::PREFER_FAST_TRACE_BIT|build_flags_t::PREFER_FAST_BUILD_BIT|build_flags_t::ALLOW_COMPACTION_BIT|build_flags_t::ALLOW_UPDATE_BIT|build_flags_t::ALLOW_DATA_ACCESS;
 	auto flags = blas->getBuildFlags()&(~OverridableMask);
@@ -128,7 +128,7 @@ auto CAssetConverter::patch_impl_t<ICPUBottomLevelAccelerationStructure>::getBui
 	}
 	return flags;
 }
-bool CAssetConverter::patch_impl_t<ICPUBottomLevelAccelerationStructure>::valid(const ILogicalDevice* device)
+bool asset_converter_impl::patch_impl_t<ICPUBottomLevelAccelerationStructure>::valid(const ILogicalDevice* device)
 {
 	// on a second thought, if someone asked for BLAS with data access, they probably intend to use it
 	const auto& limits = device->getPhysicalDevice()->getLimits();
@@ -136,7 +136,7 @@ bool CAssetConverter::patch_impl_t<ICPUBottomLevelAccelerationStructure>::valid(
 		return false;
 	return acceleration_structure_patch_base::valid(device);
 }
-CAssetConverter::patch_impl_t<ICPUTopLevelAccelerationStructure>::patch_impl_t(const ICPUTopLevelAccelerationStructure* tlas)
+asset_converter_impl::patch_impl_t<ICPUTopLevelAccelerationStructure>::patch_impl_t(const ICPUTopLevelAccelerationStructure* tlas)
 {
 	const auto flags = tlas->getBuildFlags();
 	// straight up invalid
@@ -157,7 +157,7 @@ CAssetConverter::patch_impl_t<ICPUTopLevelAccelerationStructure>::patch_impl_t(c
 	lowMemory = flags.hasFlags(build_flags_t::LOW_MEMORY_BIT);
 	maxInstances = tlas->getInstances().size();
 }
-auto CAssetConverter::patch_impl_t<ICPUTopLevelAccelerationStructure>::getBuildFlags(const ICPUTopLevelAccelerationStructure* tlas) const -> core::bitflag<build_flags_t>
+auto asset_converter_impl::patch_impl_t<ICPUTopLevelAccelerationStructure>::getBuildFlags(const ICPUTopLevelAccelerationStructure* tlas) const -> core::bitflag<build_flags_t>
 {
 	constexpr build_flags_t OverridableMask = build_flags_t::LOW_MEMORY_BIT|build_flags_t::PREFER_FAST_TRACE_BIT|build_flags_t::PREFER_FAST_BUILD_BIT|build_flags_t::ALLOW_COMPACTION_BIT|build_flags_t::ALLOW_UPDATE_BIT;
 	auto flags = tlas->getBuildFlags()&(~OverridableMask);
@@ -180,7 +180,7 @@ auto CAssetConverter::patch_impl_t<ICPUTopLevelAccelerationStructure>::getBuildF
 	}
 	return flags;
 }
-bool CAssetConverter::patch_impl_t<ICPUTopLevelAccelerationStructure>::valid(const ILogicalDevice* device)
+bool asset_converter_impl::patch_impl_t<ICPUTopLevelAccelerationStructure>::valid(const ILogicalDevice* device)
 {
 	return acceleration_structure_patch_base::valid(device);
 }
@@ -221,7 +221,7 @@ static std::string_view getLoggingLabel(const AssetType& asset)
     return asset.getObjectDebugName();
 }
 
-CAssetConverter::patch_impl_t<ICPUImage>::patch_impl_t(const ICPUImage* image)
+asset_converter_impl::patch_impl_t<ICPUImage>::patch_impl_t(const ICPUImage* image)
 {
 	const auto& params = image->getCreationParameters();
 	format = params.format;
@@ -254,7 +254,7 @@ CAssetConverter::patch_impl_t<ICPUImage>::patch_impl_t(const ICPUImage* image)
 	if (canAttemptFormatPromotion())
 		deduceMetaUsages(*this,usageFlags|stencilUsage,format);
 }
-bool CAssetConverter::patch_impl_t<ICPUImage>::valid(const ILogicalDevice* device)
+bool asset_converter_impl::patch_impl_t<ICPUImage>::valid(const ILogicalDevice* device)
 {
 	const auto& features = device->getEnabledFeatures();
 	// usages we don't have features for
@@ -272,15 +272,15 @@ bool CAssetConverter::patch_impl_t<ICPUImage>::valid(const ILogicalDevice* devic
 	return true;
 }
 
-CAssetConverter::patch_impl_t<ICPUBufferView>::patch_impl_t(const ICPUBufferView* view) {}
-bool CAssetConverter::patch_impl_t<ICPUBufferView>::valid(const ILogicalDevice* device)
+asset_converter_impl::patch_impl_t<ICPUBufferView>::patch_impl_t(const ICPUBufferView* view) {}
+bool asset_converter_impl::patch_impl_t<ICPUBufferView>::valid(const ILogicalDevice* device)
 {
 	// note that we don't check the validity of things we don't patch, so offset alignment, size and format
 	// we could check if the format and usage make sense, but it will be checked by the driver anyway
 	return true;
 }
 
-CAssetConverter::patch_impl_t<ICPUImageView>::patch_impl_t(const ICPUImageView* view, const core::bitflag<usage_flags_t> extraSubUsages) :
+asset_converter_impl::patch_impl_t<ICPUImageView>::patch_impl_t(const ICPUImageView* view, const core::bitflag<usage_flags_t> extraSubUsages) :
 	subUsages(view->getCreationParameters().actualUsages()|extraSubUsages)
 {
 	const auto& params = view->getCreationParameters();
@@ -297,7 +297,7 @@ CAssetConverter::patch_impl_t<ICPUImageView>::patch_impl_t(const ICPUImageView* 
 		}
 	}
 }
-bool CAssetConverter::patch_impl_t<ICPUImageView>::valid(const ILogicalDevice* device)
+bool asset_converter_impl::patch_impl_t<ICPUImageView>::valid(const ILogicalDevice* device)
 {
 	invalid = true;
 	// check exotic usages against device caps
@@ -328,7 +328,7 @@ bool CAssetConverter::patch_impl_t<ICPUImageView>::valid(const ILogicalDevice* d
 	return !invalid;
 }
 
-CAssetConverter::patch_impl_t<ICPUPipelineLayout>::patch_impl_t(const ICPUPipelineLayout* pplnLayout) : patch_impl_t()
+asset_converter_impl::patch_impl_t<ICPUPipelineLayout>::patch_impl_t(const ICPUPipelineLayout* pplnLayout) : patch_impl_t()
 {
 	const auto pc = pplnLayout->getPushConstantRanges();
 	for (auto it=pc.begin(); it!=pc.end(); it++)
@@ -344,7 +344,7 @@ CAssetConverter::patch_impl_t<ICPUPipelineLayout>::patch_impl_t(const ICPUPipeli
 	}
 	invalid = false;
 }
-bool CAssetConverter::patch_impl_t<ICPUPipelineLayout>::valid(const ILogicalDevice* device)
+bool asset_converter_impl::patch_impl_t<ICPUPipelineLayout>::valid(const ILogicalDevice* device)
 {
 	const auto& limits = device->getPhysicalDevice()->getLimits();
 	for (auto byte=limits.maxPushConstantsSize; byte<pushConstantBytes.size(); byte++)
@@ -353,8 +353,8 @@ bool CAssetConverter::patch_impl_t<ICPUPipelineLayout>::valid(const ILogicalDevi
 	return !invalid;
 }
 
-CAssetConverter::patch_impl_t<ICPUPolygonGeometry>::patch_impl_t(const ICPUPolygonGeometry* view) {}
-bool CAssetConverter::patch_impl_t<ICPUPolygonGeometry>::valid(const ILogicalDevice* device)
+asset_converter_impl::patch_impl_t<ICPUPolygonGeometry>::patch_impl_t(const ICPUPolygonGeometry* view) {}
+bool asset_converter_impl::patch_impl_t<ICPUPolygonGeometry>::valid(const ILogicalDevice* device)
 {
 	// patch only stores usages to propagate, the buffers themselves will check their patches
 	return true;
@@ -4457,7 +4457,7 @@ ISemaphore::future_t<IQueue::RESULT> CAssetConverter::convert_impl(SReserveResul
 				submitsNeeded |= IQueue::FAMILY_FLAGS::TRANSFER_BIT;
 				// enqueue ownership release if necessary
 				if (ownerQueueFamily!=IQueue::FamilyIgnored)
-					finalReleases.push_back({
+					finalReleases.push_back(buffer_mem_barrier_t{
 						.barrier = {
 							.dep = {
 								.srcStageMask = PIPELINE_STAGE_FLAGS::COPY_BIT,
@@ -5073,8 +5073,8 @@ ISemaphore::future_t<IQueue::RESULT> CAssetConverter::convert_impl(SReserveResul
 				if (asCount==0)
 					return {};
 				
-				constexpr bool IsTLAS = std::is_same_v<AccelerationStructure,IGPUTopLevelAccelerationStructure>;
-				using CPUAccelerationStructure = std::conditional_t<IsTLAS,ICPUTopLevelAccelerationStructure,ICPUBottomLevelAccelerationStructure>;
+				using is_tlas_t = std::is_same<AccelerationStructure,IGPUTopLevelAccelerationStructure>;
+				using CPUAccelerationStructure = std::conditional_t<is_tlas_t::value,ICPUTopLevelAccelerationStructure,ICPUBottomLevelAccelerationStructure>;
 
 				core::vector<const IGPUAccelerationStructure*> compactions;
 				// 0xffFFffFFu when not releasing ownership, otherwise index into `ownershipTransfers` where the ownership release for the old buffer was
@@ -5110,7 +5110,7 @@ ISemaphore::future_t<IQueue::RESULT> CAssetConverter::convert_impl(SReserveResul
 					//
 					core::vector<typename AccelerationStructure::DeviceBuildInfo> buildInfos;
 					buildInfos.reserve(asCount);
-					using build_range_info_t = std::conditional_t<IsTLAS,typename AccelerationStructure::BuildRangeInfo,const typename AccelerationStructure::BuildRangeInfo*>;
+					using build_range_info_t = std::conditional_t<is_tlas_t::value,typename AccelerationStructure::BuildRangeInfo,const typename AccelerationStructure::BuildRangeInfo*>;
 					core::vector<build_range_info_t> rangeInfos;
 					rangeInfos.reserve(asCount);
 					using scratch_allocator_t = std::remove_reference_t<decltype(*params.scratchForDeviceASBuild)>;
@@ -5124,7 +5124,7 @@ ISemaphore::future_t<IQueue::RESULT> CAssetConverter::convert_impl(SReserveResul
 					core::vector<IGPUBottomLevelAccelerationStructure::Triangles<IGPUBuffer>> triangles;
 					core::vector<IGPUBottomLevelAccelerationStructure::AABBs<IGPUBuffer>> aabbs;
 					core::vector<smart_refctd_ptr<const IGPUBottomLevelAccelerationStructure>> trackedBLASes;
-					if constexpr (IsTLAS)
+					if constexpr (is_tlas_t::value)
 						trackedBLASes.reserve(asCount);
 					else // would have to count total geometries in BLASes to initialize properly, and we probably don't want to over-reserve
 					{
@@ -5156,11 +5156,11 @@ ISemaphore::future_t<IQueue::RESULT> CAssetConverter::convert_impl(SReserveResul
 							success = !uniQueue || deviceASBuildScratchPtr || pipelineBarrier(computeCmdBuf,{.memBarriers={&readGeometryOrInstanceInASBuildBarrier,1}},"Pipeline Barriers of Acceleration Structure backing Buffers failed!");
 						}
 						//
-						constexpr bool IsTLAS = std::is_same_v<AccelerationStructure,IGPUTopLevelAccelerationStructure>;
+						using is_tlas_t = std::is_same<AccelerationStructure,IGPUTopLevelAccelerationStructure>;
 						if (success)
 						{
 							// rewrite the based pointers
-							if constexpr (IsTLAS)
+							if constexpr (is_tlas_t::value)
 							for (auto& info : buildInfos)
 							{
 								const auto offset = info.trackedBLASes.data();
@@ -5206,7 +5206,7 @@ ISemaphore::future_t<IQueue::RESULT> CAssetConverter::convert_impl(SReserveResul
 						allocSizes.erase(allocSizes.begin(),allocSizes.begin()+oldAllocCount);
 						buildInfos.clear();
 						rangeInfos.clear();
-						if constexpr (IsTLAS)
+						if constexpr (is_tlas_t::value)
 							trackedBLASes.clear();
 						else
 						{
@@ -5249,7 +5249,7 @@ ISemaphore::future_t<IQueue::RESULT> CAssetConverter::convert_impl(SReserveResul
 						allocSizes.push_back(asToBuild.second.scratchSize);
 						alignments.push_back(limits.minAccelerationStructureScratchOffsetAlignment);
 						const bitflag<typename AccelerationStructure::BUILD_FLAGS> buildFlags = asToBuild.second.getBuildFlags();
-						if constexpr (IsTLAS)
+						if constexpr (is_tlas_t::value)
 						{
 							const auto instances = canonical->getInstances();
 							// gather total input size and check dependants exist
@@ -5376,7 +5376,7 @@ ISemaphore::future_t<IQueue::RESULT> CAssetConverter::convert_impl(SReserveResul
 						const auto trianglesOffset = triangles.size();
 						const auto aabbsOffset = aabbs.size();
 						const size_t trackedBLASesOffset = trackedBLASes.size();
-						if constexpr (IsTLAS)
+						if constexpr (is_tlas_t::value)
 						{
 							const auto instances = canonical->getInstances();
 							const auto instanceCount = static_cast<uint32_t>(instances.size());
@@ -5577,7 +5577,7 @@ ISemaphore::future_t<IQueue::RESULT> CAssetConverter::convert_impl(SReserveResul
 						{
 							if (willCompact)
 								compactedOwnershipReleaseIndices.push_back(ownershipTransfers.size());
-							ownershipTransfers.push_back({
+							ownershipTransfers.push_back(buffer_mem_barrier_t{
 								.barrier = {
 									.dep = {
 										.srcStageMask = PIPELINE_STAGE_FLAGS::ACCELERATION_STRUCTURE_BUILD_BIT,
@@ -5627,7 +5627,7 @@ ISemaphore::future_t<IQueue::RESULT> CAssetConverter::convert_impl(SReserveResul
 					core::vector<size_t> sizes(compactions.size());
 					if (!device->getQueryPoolResults(queryPool.get(),0,compactions.size(),sizes.data(),sizeof(size_t),bitflag(IQueryPool::RESULTS_FLAGS::WAIT_BIT)|IQueryPool::RESULTS_FLAGS::_64_BIT))
 					{
-						logger.log("Failed to Query %sLevelAccelerationStructure compacted sizes, skipping compaction!",system::ILogger::ELL_ERROR,IsTLAS ? "Top":"Bottom");
+						logger.log("Failed to Query %sLevelAccelerationStructure compacted sizes, skipping compaction!",system::ILogger::ELL_ERROR,is_tlas_t::value ? "Top":"Bottom");
 						return {};
 					}
 					//
@@ -5697,7 +5697,7 @@ ISemaphore::future_t<IQueue::RESULT> CAssetConverter::convert_impl(SReserveResul
 							{
 								typename AccelerationStructure::SCreationParams creationParams = {srcAS->getCreationParams()};
 								creationParams.bufferRange = {.offset=0,.size=sizes[i],.buffer=std::move(backingBuffer)};
-								if constexpr (IsTLAS)
+								if constexpr (is_tlas_t::value)
 								{
 									creationParams.maxInstanceCount = srcAS->getMaxInstanceCount();
 									compactedAS = device->createTopLevelAccelerationStructure(std::move(creationParams));
