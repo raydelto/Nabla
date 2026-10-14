@@ -380,12 +380,12 @@ namespace asset_converter_impl
 /*
 * This whole class assumes all assets you are converting will be used in read-only mode by the Device.
 * It's a valid assumption for everything from pipelines to shaders, but not for descriptors (with exception of samplers) and their sets.
-* 
+*
 * Only Descriptors (by proxy their backing objects) and their Sets can have their contents changed after creation.
-* 
+*
 * What this converter does is it computes hashes and compares equality based on the contents of an IAsset, not the pointer!
 * With some sane limits, its not going to compare the contents of an ICPUImage or ICPUBuffer.
-* 
+*
 * Therefore if you don't want some resource to be deduplicated you need to "explicitly" let us know via `SInputs::getDependantUniqueCopyGroupID`.
 */
 class CAssetConverter : public core::IReferenceCounted
@@ -393,13 +393,13 @@ class CAssetConverter : public core::IReferenceCounted
 	public:
 		// Shader, DSLayout, PipelineLayout, Compute Pipeline
 		// Renderpass, Graphics Pipeline
-		// Buffer, BufferView, Sampler, Image, Image View, Bottom Level AS, Top Level AS, Descriptor Set, Framebuffer  
+		// Buffer, BufferView, Sampler, Image, Image View, Bottom Level AS, Top Level AS, Descriptor Set, Framebuffer
 		// Buffer -> SRange, patched usage, owner(s)
 		// BufferView -> SRange, promoted format
 		// Sampler -> Clamped Params (only aniso, really)
 		// Image -> this, patched usage, promoted format
 		// Image View -> ref to patched Image, patched usage, promoted format
-		// Descriptor Set -> unique layout, 
+		// Descriptor Set -> unique layout,
 		using supported_asset_types = core::type_list<
 			asset::ICPUSampler,
 			asset::IShader,

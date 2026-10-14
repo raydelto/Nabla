@@ -729,7 +729,7 @@ struct extent<T[], I> : integral_constant<uint64_t,extent<T, I - 1>::value> {};
 template<class T, NBL_VECTOR_DIM_T N, uint32_t I>
 struct extent<vector<T,N>, I> : extent<T[N], I> {};
 
-template<class T, NBL_MATRIX_DIM_T M, NBL_MATRIX_DIM_T N, uint32_t I> 
+template<class T, NBL_MATRIX_DIM_T M, NBL_MATRIX_DIM_T N, uint32_t I>
 struct extent<matrix<T,N,M>, I> : extent<T[N][M], I> {};
 
 

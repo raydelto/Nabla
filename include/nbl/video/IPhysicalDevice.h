@@ -28,7 +28,7 @@ namespace nbl::video
 
 class NBL_API2 IPhysicalDevice : public core::Interface, public core::Unmovable
 {
-    // a partial specialization of a variable template is not allowed in class scope (GCC), detect through a class template instead
+    // GCC 13 rejects the in-class variable-template partial specialization; use a class trait.
     template<class F> struct is_bitflag_helper : std::false_type {};
     template<class F> struct is_bitflag_helper<core::bitflag<F>> : std::true_type {};
     template<class F> static constexpr bool is_bitflag = is_bitflag_helper<F>::value;
